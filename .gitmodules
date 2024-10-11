@@ -1,0 +1,6 @@
+[submodule "42-MEGALIBFT"]
+	path = 42-MEGALIBFT
+	url = https://github.com/lekix-lekix/42-MEGALIBFT
+[submodule "minilibx-linux"]
+	path = minilibx-linux
+	url = https://github.com/42Paris/minilibx-linux.git
