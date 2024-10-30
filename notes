@@ -1,0 +1,42 @@
+--> unprotected mallocs :   get_color.C (ft_strtrim)
+                            add_text.c (ft_split)
+--> error handling en cas de failed allocation
+--> map needs to be 9*9 minimum
+--> \n at the end of the file makes throws an error
+
+// int	add_check_texture_path(char **tab, t_list *start, t_cub *cub,
+// 		char **cub_texture)
+// {
+// 	if (size_tab(tab) != 2)
+// 		texture_error(tab, start, cub,
+// 			"Format error in elements: ID ./path_to_texture.");
+// 	if (*cub_texture == NULL)
+// 	{
+// 		*cub_texture = ft_strdup(tab[1]);
+// 		if (!*cub_texture)
+// 			texture_error(tab, start, cub, "malloc error: add_west");
+// 	}
+// 	else
+// 		texture_error(tab, start, cub,
+// 			"Each ID can only have one texture path.");         // suggestion pour eviter les 4 fonctions presques identiques
+// 	return (0);
+// }
+
+// void	add_texture(char **split_elem, t_list *file_content, t_list *start,
+// 		t_cub *cub)
+// {
+// 	split_elem = ft_split(file_content->content, ' ');
+// 	if (split_elem && ft_strncmp(split_elem[0], "NO", 3) == 0)
+// 		add_check_texture_path(split_elem, start, cub, &cub->no_text);
+// 	if (split_elem && ft_strncmp(split_elem[0], "SO", 3) == 0)
+// 		add_check_texture_path(split_elem, start, cub, &cub->so_text);
+// 	if (split_elem && ft_strncmp(split_elem[0], "EA", 3) == 0)
+// 		add_check_texture_path(split_elem, start, cub, &cub->ea_text);
+// 	if (split_elem && ft_strncmp(split_elem[0], "WE", 3) == 0)
+// 		add_check_texture_path(split_elem, start, cub, &cub->we_text);
+// 	if (split_elem && ft_strncmp(split_elem[0], "C", 2) == 0)
+// 		get_color(split_elem, start, cub, 'C');
+// 	if (split_elem && ft_strncmp(split_elem[0], "F", 2) == 0)
+// 		get_color(split_elem, start, cub, 'F');
+// 	free_tab(split_elem);
+// }

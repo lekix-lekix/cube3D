@@ -1,64 +1,62 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/10 14:45:02 by kipouliq          #+#    #+#              #
-#    Updated: 2024/10/11 16:39:43 by kipouliq         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME = cube3D
-
-SRCS = ./srcs/map/map_checking.c \
-	./srcs/map/test_characters.c \
-	./srcs/mlx/mlx.c
-
-OBJ = $(SRCS:.c=.o)
-
-OBJ_BONUS = $(SRCS_BONUS:.c=.o)
-
-INCLUDE = -I
-
 CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3
+INCLUDE = cub3d.h
+LIBFT = ./libft/libft.a
+LIB = -L libft -lft -L mlx/ -lm
+MLX = -lXext -lX11
+NAME = cub3d
+# NAME_BONUS = cub3d_bonus
 
-MLX = ./minilibx-linux/libmlx.a
+SRC = src/parsing.c src/errors.c src/utils.c src/utils2.c src/init.c \
+	src/add_text.c src/main.c src/get_color.c src/test_characters.c \
+	src/map_checking.c \
+	src/mlx.c \
+	src/mlx_utils.c \
+	src/handle_keyboard_inputs.c \
+	src/movement_inputs.c \
+	src/map_utils.c \
+	src/minimap.c \
+	src/bresenham.c
+# SRC_BONUS =
 
-MLX_FLAGS = -lmlx -lXext -lX11 -lm 
+OBJS_BASE = $(SRC:.c=.o)
+# OBJS_BASE_BONUS = $(SRC_BONUS:.c=.o)
+OBJ_PATH = obj/
+OBJS = $(addprefix $(OBJ_PATH),$(OBJS_BASE))
+# OBJS_BONUS = $(addprefix $(OBJ_PATH), $(OBJS_BASE_BONUS))
 
-FLAGS = -Wall -Wextra -Werror -g3
+all: $(OBJ_PATH) $(NAME)
 
-PATH_LIBFT = ./42-MEGALIBFT
+$(NAME) : $(OBJS)
+	make -C libft/
+	make -C mlx/
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -L ./mlx -lmlx -lXext -lX11 -lm  -o $(NAME)
 
-PATH_MLX = ./minilibx-linux
+# $(NAME_BONUS) : $(OBJS_BONUS)
+# 	make -C libft/
+# 	make -C mlx/
+# 	$(CC) $(CFLAGS) -I $(INCLUDE) $(MLX) -o $(NAME_BONUS) $(OBJS_BONUS) $(LIB)
 
-LIBFT = ./42-MEGALIBFT/megalibft.a
+$(OBJ_PATH)%.o: %.c
+	$(CC) $(CFLAGS) -I ./libft -I ./mlx -c $< -o $@
 
-all :
-	git submodule update --init
-	make $(NAME)
+$(OBJ_PATH):
+	mkdir -p obj/
+	mkdir -p obj/src/
+#	mkdir -p obj/src_bonus/
 
-$(NAME) : $(OBJ)
-	make -C $(PATH_MLX)
-	make -C $(PATH_LIBFT)
-	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -L ./minilibx-linux $(MLX_FLAGS) -o $(NAME) -g3
+clean:
+	make fclean -C libft/
+	rm -rf $(OBJ_PATH)
+	rm -f $(OBJS)
+#	rm -f $(OBJS_BONUS)
 
-%.o:%.c
-	$(CC) $(FLAGS) -I $(PATH_LIBFT) -I $(PATH_MLX) -c $< -o $@
-
-clean :
-	make -sC $(PATH_MLX) clean
-	make -sC $(PATH_LIBFT) clean
-	rm -f ./srcs/*/*.o
-	
-fclean : clean
-	make -sC $(PATH_LIBFT) fclean
+fclean: clean
 	rm -f $(NAME)
-	rm -f $(NAME_BONUS)
+#	rm -f $(NAME_BONUS)
 
-re : fclean
-	make all
+re: fclean all
 
-.PHONY : all bonus clean fclean re
+# bonus:	$(OBJ_PATH) $(NAME_BONUS)
+
+.PHONY: all clean fclean re
