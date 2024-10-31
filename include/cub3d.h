@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/29 12:39:19 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/10/31 14:04:52 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_player
 	t_vector		dir;
 	t_vector		fov_l;
 	t_vector		fov_r;
+    char            initial_dir;
 	double			angle;
 }					t_player;
 
