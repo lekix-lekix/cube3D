@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/04 16:28:53 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:28:19 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	move_direction_left(t_cub *cub)
 
 int	move_direction_right(t_cub *cub)
 {
-	if (cub->player.angle == 359)
+	if (cub->player.angle == 361)
 		cub->player.angle = 1;
 	else
 		cub->player.angle += 1;
