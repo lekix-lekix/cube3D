@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/07 18:35:11 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:49:35 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,6 @@ void	ft_swap(double *a, double *b)
 
 int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
 {
-    // printf("start x %f y %f\")
 	start = coordinates_to_px(start.x, start.y, arr_size);
 	end = coordinates_to_px(end.x, end.y, arr_size);
 	start.x = round(start.x);
@@ -152,53 +151,6 @@ int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
 	drawLine((int)start.x, (int)start.y, (int)end.x, (int)end.y, 0x008000, img);
 	return (0);
 }
-
-// int shoot_rays(t_cub *cub)
-// {
-//     t_vector *rays;
-//     t_position fov_l;
-//     t_position fov_r;
-
-//     rays = malloc(sizeof(t_vector) * 10);
-//     if (!rays)
-//         return (error_exit(NULL));
-//     fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
-//     fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
-//     return (0);
-// }
-
-// int	draw_ray(t_mlx_img *img, t_position start, t_vector end, int arr_size,
-// int color)
-// {
-//     t_position ray_start;
-//     t_position ray_end;
-
-//     // ray_end = get_pos_from_vector(start, end);
-//     // start = coordinates_to_px(start.x, start.y, arr_size);
-//     // start.x = round(start.x);
-//     // start.y = round(start.y);
-//     // ray_end = coordinates_to_px(end.x + start.x, end.y + start.y,
-// arr_size);
-//     // ray_end.x = round(ray_end.x);
-//     // ray_end.y = round(ray_end.y);
-//     ray_start = coordinates_to_px(start.x, start.y, arr_size);
-//     // ray_start.x = round(ray_start.x);
-//     // ray_start.y = round(ray_start.y);
-//     ray_end = get_pos_from_vector(start, end);
-//     printf("player px pos = x %f y %f\n", ray_start.x, ray_start.y);
-//     printf("ray_end vector position x %f y %f\n", ray_end.x, ray_end.y);
-//     ray_end = coordinates_to_px(ray_end.x, ray_end.y, arr_size);
-//     // ray_end.x = round(ray_end.x);
-//     // ray_end.y = round(ray_end.y);
-//     printf("ray_end x = %f ray_end y = %f\n", ray_end.x, ray_end.y);
-// 	if (abs((int)ray_end.x > (int)ray_start.x) > abs((int)ray_end.y
-// - (int)ray_start.y))
-// 		draw_ray_horizontal(img, ray_start, ray_end, color);
-// 	else
-// 		draw_ray_vertical(img, ray_start, ray_end, color);
-//     printf("==========\n");
-// 	return (0);
-// }
 
 t_vector	find_dir(t_cub *cub)
 {
@@ -241,11 +193,7 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 		cub->player.angle = 270;
 	else
 		cub->player.angle = 180;
-	// init_camera_vectors(cub);
-	// draw_player(img, cub);
 	refresh_raycasting(cub);
-	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, img->img_ptr, 0,
-	// 0);
 	mlx_destroy_image(data->mlx_ptr, img->img_ptr);
 	return (0);
 }
@@ -265,36 +213,32 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 	double	modf_real;
 
 	// printf("pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
-	printf("angle is %f\n", degree_ray_angle);
-	// dy = fabs(1 / fabs(sin(degree_to_rad(degree_ray_angle))));
-	// dx = fabs(1 / fabs(cos(degree_to_rad(degree_ray_angle))));
-	dy = fabs(1 / (sin(degree_to_rad(degree_ray_angle))));
-	dx = fabs(1 / (cos(degree_to_rad(degree_ray_angle))));
+	// printf("angle is %f\n", degree_ray_angle);
+	if (degree_ray_angle == 360)
+		dy = INFINITY;
+	else
+		dy = fabs(1 / fabs(sin(degree_to_rad(degree_ray_angle))));
+	if (degree_ray_angle == 90)
+		dx = INFINITY;
+	else
+		dx = fabs(1 / fabs(cos(degree_to_rad(degree_ray_angle))));
 	// printf("dx = %f, dy = %f\n", dx, dy);
 	x = cub->player.pos.x;
 	y = cub->player.pos.y;
-	// chatgpt is a lovely bot
-	// printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
-	// printf("mod f x = %f, mod f y = %f\n", modf(cub->player.pos.x, &modf_var),
-		// modf(cub->player.pos.y, &modf_var));
+	// printf("player pos x = %f y = %f\n", cub->player.pos.x,
+	// cub->player.pos.y);
+	// printf("mod f x = %f, mod f y = %f\n", modf(cub->player.pos.x,
+			// &modf_var),
+	// modf(cub->player.pos.y, &modf_var));
 	if (modf(cub->player.pos.x, &modf_var))
 	{
-		// modf_real = modf(cub->player.pos.x, &modf_var);
-		// if (degree_ray_angle < 90)
-		// {
-		// 	dx_sum = fabs((1 - modf_real) * dx);
-		// 	printf("going here x\n");
-		// }
-		// else
-		// {
-		// 	dx_sum = fabs(modf_real * dx);
-		// 	printf("going there x\n");
-		// }
 		if (modf(cub->player.pos.x, &modf_var))
 		{
 			modf_real = modf(cub->player.pos.x, &modf_var);
+			// printf("modf_real x = %f, modf_var = %f\n", modf_real, modf_var);
 			if (degree_ray_angle < 90 || degree_ray_angle > 270)
 			{ // Rightward or up
+				// printf("goes in there\n");
 				dx_sum = fabs((1 - modf_real) * dx);
 			}
 			else
@@ -305,49 +249,29 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 		else
 		{
 			dx_sum = fabs(dx);
+			x -= 1;
 		}
-		// if (degree_ray_angle < 90)
-		// 	dx_sum = fabs((1 - modf_real) * dx);
-		// else
-		// 	dx_sum = fabs(modf_real * dx);
-		// dx_sum = fabs((1 + modf_real) * dx);
 	}
 	else
 		dx_sum = fabs(dx);
 	if (modf(cub->player.pos.y, &modf_var))
 	{
-		// modf_real = modf(cub->player.pos.y, &modf_var);
-		// if (degree_ray_angle < 180)
-		// {
-		// 	printf("going here y\n");
-		// 	dy_sum = fabs((1 - (modf_real)) * dy);
-		// }
-		// else
-		// {
-		// 	dy_sum = fabs(modf_real * dy);
-		// 	printf("going there y\n");
-		// }
 		if (modf(cub->player.pos.y, &modf_var))
 		{
-            modf_real = modf(cub->player.pos.y, &modf_var);
+			modf_real = modf(cub->player.pos.y, &modf_var);
 			if (degree_ray_angle > 180)
-                dy_sum = fabs((1 - modf_real) * dy);
-            else
-                dy_sum = fabs(modf_real * dy);
+				dy_sum = fabs((1 - modf_real) * dy);
+			else
+				dy_sum = fabs(modf_real * dy);
 		}
 		else
-		{
 			dy_sum = fabs(dy);
-		}
-		// if (degree_ray_angle < 90)
-		// {
-		// dy_sum = fabs((1 + modf_real) * dy);
-		// }
-		// else
-		// dy_sum = fabs(modf_real * dy);
 	}
 	else
+	{
 		dy_sum = fabs(dy);
+		// y += 1;
+	}
 	// printf("init dx sum = %f, dy sum = %f\n", dx_sum, dy_sum);
 	wall_hit = 0;
 	last_inc = -1;
@@ -358,8 +282,16 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 		{
 			if (last_inc == 0)
 				ray_length = fabs(dy_sum - dy);
-			if (last_inc == 1)
+			else if (last_inc == 1)
 				ray_length = fabs(dx_sum - dx);
+			else
+			{
+				if (dx_sum < dy_sum)
+					return (dx_sum);
+				else
+					return (dy_sum);
+			}
+			// printf("dx sum = %f, dy sum = %f\n", dx_sum, dy_sum);
 			// printf("wall hit at x %d y %d\n", x, y);
 			// printf("ray lenght = %f\n", ray_length);
 			return (ray_length);
@@ -411,23 +343,21 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 
 	arr_size = get_arr_size(cub->map);
 	i = 0;
-	printf("==================\n");
-	ray_inc = FOV / 20;
-	printf("ray inc = %f\n", ray_inc);
+	// printf("==================\n");
+	ray_inc = FOV / 60;
+	// printf("ray inc = %f\n", ray_inc);
 	angle = cub->player.angle - (FOV / 2);
-	while (i < 20)
+	printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
+	while (i < 60)
 	{
 		angle += ray_inc;
 		if (angle < 0)
-		{
 			angle += 360;
-		}
 		else if (angle > 360)
-		{
 			angle -= 360;
-		}
-        printf("angle = %d\n", angle);
+		// printf("angle = %d\n", angle);
 		ray_length = find_ray_length(cub, angle);
+		// printf("ray lenght = %f\n", ray_length);
 		ray = get_vector_from_length(ray_length, angle);
 		draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
 				ray), arr_size);

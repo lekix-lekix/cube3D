@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/07 18:28:38 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:20:48 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define DOWN 65364
 # define RIGHT 65363
 # define ESCAPE 65307
-# define ONE_UNIT 120
+# define ONE_UNIT 50
 # define FOV 60
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
