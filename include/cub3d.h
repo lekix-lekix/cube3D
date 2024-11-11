@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/08 15:20:48 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:25:58 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define FOV 60
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
+# define SCREEN_WIDTH 800
+# define SCREEN_HEIGHT 600
 
 typedef struct s_window_mlx
 {

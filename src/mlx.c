@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/08 14:49:35 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:41:39 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 	if (!img)
 		return (error_exit(NULL), -1);
 	find_player_init_pos(cub);
-	draw_map(img, cub->map);
+	// draw_map(img, cub->map);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -228,7 +228,7 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 	// printf("player pos x = %f y = %f\n", cub->player.pos.x,
 	// cub->player.pos.y);
 	// printf("mod f x = %f, mod f y = %f\n", modf(cub->player.pos.x,
-			// &modf_var),
+	// &modf_var),
 	// modf(cub->player.pos.y, &modf_var));
 	if (modf(cub->player.pos.x, &modf_var))
 	{
@@ -332,39 +332,114 @@ t_vector	get_vector_from_length(double ray_length, double degree_angle)
 	return (ray);
 }
 
+int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height)
+{
+	int	start_y;
+	int	end_y;
+	int	screen_half;
+	int	proj_half;
+	int	i;
+
+	screen_half = SCREEN_HEIGHT / 2;
+	proj_half = proj_height / 2;
+	start_y = screen_half - proj_half;
+	end_y = screen_half + proj_half;
+	i = 0;
+	while (i < SCREEN_HEIGHT)
+	{
+		// printf("x = %d, i = %d\n", x, i);
+		while (i < start_y && i < SCREEN_HEIGHT)
+		{
+			img_pix_put(img, x, i, cub->c_color);
+			i++;
+		}
+		while (i < end_y && i < SCREEN_HEIGHT)
+		{
+            // printf("x = %d, i = %d\n", x, i);
+			img_pix_put(img, x, i, 0x0000FF);
+			i++;
+		}
+		img_pix_put(img, x, i, cub->f_color);
+		i++;
+	}
+	return (0);
+}
+
 int	shoot_rays(t_mlx_img *img, t_cub *cub)
 {
-	int			arr_size;
-	t_vector	ray;
-	double		ray_length;
-	int			i;
-	int			angle;
-	double		ray_inc;
+	int		arr_size;
+	double	ray_length;
+	int		i;
+	double	angle;
+	double	ray_inc;
+	double	distance_to_proj_plane;
+	double	proj_height;
 
+	// t_vector	ray;
 	arr_size = get_arr_size(cub->map);
-	i = 0;
+	i = SCREEN_WIDTH - 1;
 	// printf("==================\n");
-	ray_inc = FOV / 60;
+	ray_inc = (double)FOV / (double)SCREEN_WIDTH;
 	// printf("ray inc = %f\n", ray_inc);
 	angle = cub->player.angle - (FOV / 2);
-	printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
-	while (i < 60)
+	distance_to_proj_plane = (SCREEN_WIDTH / 2) / tan(degree_to_rad(FOV / 2));
+	// printf("distnce to plane = %f\n", distance_to_proj_plane);
+	// printf("player pos x = %f y = %f\n", cub->player.pos.x,
+		// cub->player.pos.y);
+	while (i >= 0)
 	{
 		angle += ray_inc;
 		if (angle < 0)
 			angle += 360;
 		else if (angle > 360)
 			angle -= 360;
-		// printf("angle = %d\n", angle);
 		ray_length = find_ray_length(cub, angle);
-		// printf("ray lenght = %f\n", ray_length);
-		ray = get_vector_from_length(ray_length, angle);
-		draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
-				ray), arr_size);
-		i++;
+		// printf("ray length = %f\n", ray_length);
+		proj_height = distance_to_proj_plane / (ray_length * cos(degree_to_rad(angle)));
+			// 1 being wall height arbitrary unit
+		draw_vertical_slice(img, cub, i, proj_height);
+		// printf("proj height = %f\n", proj_height);
+		// ray = get_vector_from_length(ray_length, angle);
+		// draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
+		// 		ray), arr_size);
+		i--;
 	}
 	return (0);
 }
+
+// int	shoot_rays(t_mlx_img *img, t_cub *cub)
+// {
+// 	int			arr_size;
+// 	t_vector	ray;
+// 	double		ray_length;
+// 	int			i;
+// 	int			angle;
+// 	double		ray_inc;
+
+// 	arr_size = get_arr_size(cub->map);
+// 	i = 0;
+// 	// printf("==================\n");
+// 	ray_inc = FOV / 60;
+// 	// printf("ray inc = %f\n", ray_inc);
+// 	angle = cub->player.angle - (FOV / 2);
+// 	printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
+// 	while (i < 60)
+// 	{
+// 		angle += ray_inc;
+// 		if (angle < 0)
+// 			angle += 360;
+// 		else if (angle > 360)
+// 			angle -= 360;
+// 		// printf("angle = %d\n", angle);
+// 		ray_length = find_ray_length(cub, angle);
+// 		printf("ray lenght = %f\n", ray_length);
+// 		ray = get_vector_from_length(ray_length, angle);
+// 		draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
+// 				ray), arr_size);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 int	refresh_raycasting(t_cub *cub)
 {
@@ -375,8 +450,8 @@ int	refresh_raycasting(t_cub *cub)
 	img = init_img(&cub->mlx_data);
 	if (!img)
 		return (error_exit(NULL), -1);
-	printf("player pos = x %f y %f\n", cub->player.pos.x, cub->player.pos.y);
-	draw_map(img, cub->map);
+	// printf("player pos = x %f y %f\n", cub->player.pos.x, cub->player.pos.y);
+	// draw_map(img, cub->map);
 	shoot_rays(img, cub);
 	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
 		img->img_ptr, 0, 0);
