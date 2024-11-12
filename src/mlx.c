@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/11 17:41:39 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:51:03 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 	if (!img)
 		return (error_exit(NULL), -1);
 	find_player_init_pos(cub);
-	// draw_map(img, cub->map);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -212,8 +211,6 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 	double	modf_var;
 	double	modf_real;
 
-	// printf("pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
-	// printf("angle is %f\n", degree_ray_angle);
 	if (degree_ray_angle == 360)
 		dy = INFINITY;
 	else
@@ -222,29 +219,17 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 		dx = INFINITY;
 	else
 		dx = fabs(1 / fabs(cos(degree_to_rad(degree_ray_angle))));
-	// printf("dx = %f, dy = %f\n", dx, dy);
 	x = cub->player.pos.x;
 	y = cub->player.pos.y;
-	// printf("player pos x = %f y = %f\n", cub->player.pos.x,
-	// cub->player.pos.y);
-	// printf("mod f x = %f, mod f y = %f\n", modf(cub->player.pos.x,
-	// &modf_var),
-	// modf(cub->player.pos.y, &modf_var));
 	if (modf(cub->player.pos.x, &modf_var))
 	{
 		if (modf(cub->player.pos.x, &modf_var))
 		{
 			modf_real = modf(cub->player.pos.x, &modf_var);
-			// printf("modf_real x = %f, modf_var = %f\n", modf_real, modf_var);
 			if (degree_ray_angle < 90 || degree_ray_angle > 270)
-			{ // Rightward or up
-				// printf("goes in there\n");
 				dx_sum = fabs((1 - modf_real) * dx);
-			}
 			else
-			{ // Leftward or down
 				dx_sum = fabs(modf_real * dx);
-			}
 		}
 		else
 		{
@@ -268,37 +253,27 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 			dy_sum = fabs(dy);
 	}
 	else
-	{
 		dy_sum = fabs(dy);
-		// y += 1;
-	}
-	// printf("init dx sum = %f, dy sum = %f\n", dx_sum, dy_sum);
 	wall_hit = 0;
 	last_inc = -1;
 	while (!wall_hit && x >= 0 && y >= 0)
 	{
-		// printf("top of the loop = x = %d, y = %d\n", x, y);
 		if (cub->map[y][x] == '1')
 		{
 			if (last_inc == 0)
+			{
 				ray_length = fabs(dy_sum - dy);
-			else if (last_inc == 1)
-				ray_length = fabs(dx_sum - dx);
+				return (ray_length);
+			}
 			else
 			{
-				if (dx_sum < dy_sum)
-					return (dx_sum);
-				else
-					return (dy_sum);
+				ray_length = fabs(dx_sum - dx);
+				return (ray_length);
 			}
-			// printf("dx sum = %f, dy sum = %f\n", dx_sum, dy_sum);
-			// printf("wall hit at x %d y %d\n", x, y);
-			// printf("ray lenght = %f\n", ray_length);
 			return (ray_length);
 		}
 		if (dx_sum > dy_sum)
 		{
-			// printf("x is smaller dx sum = %f\n", dx_sum);
 			if (degree_ray_angle > 180 && degree_ray_angle <= 359)
 				y++;
 			else
@@ -308,7 +283,6 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 		}
 		else
 		{
-			// printf("y is smaller dy sum = %f\n", dy_sum);
 			if (degree_ray_angle > 90 && degree_ray_angle <= 270)
 				x--;
 			else
@@ -332,7 +306,13 @@ t_vector	get_vector_from_length(double ray_length, double degree_angle)
 	return (ray);
 }
 
-int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height)
+int	create_trgb(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
+int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
+		int *color_arr, int ray_length)
 {
 	int	start_y;
 	int	end_y;
@@ -355,8 +335,14 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height)
 		}
 		while (i < end_y && i < SCREEN_HEIGHT)
 		{
-            // printf("x = %d, i = %d\n", x, i);
-			img_pix_put(img, x, i, 0x0000FF);
+			if (ray_length >= color_arr[0] && ray_length <= color_arr[1])
+				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255));
+			else if (ray_length >= color_arr[1] && ray_length <= color_arr[2])
+				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.75));
+			else if (ray_length >= color_arr[2] && ray_length <= color_arr[3])
+				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.50));
+			else
+				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.25));
 			i++;
 		}
 		img_pix_put(img, x, i, cub->f_color);
@@ -367,6 +353,7 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height)
 
 int	shoot_rays(t_mlx_img *img, t_cub *cub)
 {
+	int		color_arr[4];
 	int		arr_size;
 	double	ray_length;
 	int		i;
@@ -374,18 +361,18 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 	double	ray_inc;
 	double	distance_to_proj_plane;
 	double	proj_height;
+	double	relative_angle;
 
-	// t_vector	ray;
-	arr_size = get_arr_size(cub->map);
 	i = SCREEN_WIDTH - 1;
-	// printf("==================\n");
+	arr_size = get_arr_size(cub->map);
+	color_arr[0] = arr_size / 4;
+	color_arr[1] = arr_size / 4 * 2;
+	color_arr[2] = arr_size / 4 * 3;
+	color_arr[3] = arr_size;
 	ray_inc = (double)FOV / (double)SCREEN_WIDTH;
-	// printf("ray inc = %f\n", ray_inc);
 	angle = cub->player.angle - (FOV / 2);
 	distance_to_proj_plane = (SCREEN_WIDTH / 2) / tan(degree_to_rad(FOV / 2));
-	// printf("distnce to plane = %f\n", distance_to_proj_plane);
-	// printf("player pos x = %f y = %f\n", cub->player.pos.x,
-		// cub->player.pos.y);
+	relative_angle = FOV / 2;
 	while (i >= 0)
 	{
 		angle += ray_inc;
@@ -395,13 +382,10 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 			angle -= 360;
 		ray_length = find_ray_length(cub, angle);
 		// printf("ray length = %f\n", ray_length);
-		proj_height = distance_to_proj_plane / (ray_length * cos(degree_to_rad(angle)));
-			// 1 being wall height arbitrary unit
-		draw_vertical_slice(img, cub, i, proj_height);
-		// printf("proj height = %f\n", proj_height);
-		// ray = get_vector_from_length(ray_length, angle);
-		// draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
-		// 		ray), arr_size);
+		relative_angle -= ray_inc;
+		proj_height = distance_to_proj_plane / (ray_length
+				* cos(degree_to_rad(relative_angle)));
+		draw_vertical_slice(img, cub, i, proj_height, color_arr, ray_length);
 		i--;
 	}
 	return (0);
