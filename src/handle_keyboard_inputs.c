@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keyboard_inputs.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/12 16:50:47 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:16:06 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	move_direction_left(t_cub *cub)
 	if (cub->player.angle == 0)
 		cub->player.angle = 360;
 	else
-		cub->player.angle += 1;
+		cub->player.angle += 2;
 	cub->player.dir = rotate_vector(cub->player.dir, degree_to_rad(1) * -1);
 	refresh_raycasting(cub);
 	return (0);
@@ -28,7 +28,7 @@ int	move_direction_right(t_cub *cub)
 	if (cub->player.angle == 361)
 		cub->player.angle = 1;
 	else
-		cub->player.angle -= 1;
+		cub->player.angle -= 2;
 	cub->player.dir = rotate_vector(cub->player.dir, degree_to_rad(1));
 	refresh_raycasting(cub);
 	return (0);
@@ -52,16 +52,16 @@ int	move_character_in_direction(int key, t_cub *cub)
 	if (key == W)
 	{
 		next_pos_x = cub->player.pos.x + cos(degree_to_rad(cub->player.angle))
-			* 0.1;
+			* 0.2;
 		next_pos_y = cub->player.pos.y - sin(degree_to_rad(cub->player.angle))
-			* 0.1;
+			* 0.2;
 	}
 	else
 	{
 		next_pos_x = cub->player.pos.x - cos(degree_to_rad(cub->player.angle))
-			* 0.1;
+			* 0.2;
 		next_pos_y = cub->player.pos.y + sin(degree_to_rad(cub->player.angle))
-			* 0.1;
+			* 0.2;
 	}
 	// printf("next pos x = %f y = %f\n", next_pos_x, next_po/s_y);
 	modf(next_pos_y, &modf_var);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/12 16:51:03 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:36:43 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_vector	rotate_vector(t_vector vec, double angle)
 	return (new_vector);
 }
 
-double	degree_to_rad(int degree)
+double	degree_to_rad(double degree)
 {
 	return (degree * PI_RAD);
 }
@@ -108,21 +108,21 @@ int	draw_player(t_mlx_img *img, t_cub *cub)
 	t_position	fov_l;
 	t_position	fov_r;
 	t_position	dir;
-	t_position	px_fov_l;
-	t_position	px_fov_r;
-	t_position	px_dir;
-	t_position	px_player;
 	int			arr_size;
 
+	// t_position	px_fov_l;
+	// t_position	px_fov_r;
+	// t_position	px_dir;
+	// t_position	px_player;
 	arr_size = get_arr_size(cub->map);
 	fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
 	fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
 	dir = get_pos_from_vector(cub->player.pos, cub->player.dir);
-	px_fov_l = coordinates_to_px(fov_l.x, fov_l.y, arr_size);
-	px_fov_r = coordinates_to_px(fov_r.x, fov_r.y, arr_size);
-	px_dir = coordinates_to_px(dir.x, dir.y, arr_size);
-	px_player = coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
-			arr_size);
+	// px_fov_l = coordinates_to_px(fov_l.x, fov_l.y, arr_size);
+	// px_fov_r = coordinates_to_px(fov_r.x, fov_r.y, arr_size);
+	// px_dir = coordinates_to_px(dir.x, dir.y, arr_size);
+	// px_player = coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
+	// arr_size);
 	draw(img, coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
 			arr_size));
 	draw(img, coordinates_to_px(fov_l.x, fov_l.y, arr_size));
@@ -197,7 +197,8 @@ int	start_raycasting(t_window_mlx *data, t_cub *cub)
 	return (0);
 }
 
-double	find_ray_length(t_cub *cub, double degree_ray_angle)
+double	find_ray_length(t_cub *cub, double degree_ray_angle,
+		double *intersection_x, double *intersection_y)
 {
 	double	dx;
 	double	dy;
@@ -263,11 +264,20 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle)
 			if (last_inc == 0)
 			{
 				ray_length = fabs(dy_sum - dy);
+				*intersection_x = cub->player.pos.x
+					+ cos(degree_to_rad(degree_ray_angle)) * dy_sum;
+				*intersection_y = y;
+                printf("mod x = %f\n", fmod(*intersection_x, 1.0));
+				// printf("wall hit dy\n");
 				return (ray_length);
 			}
 			else
 			{
 				ray_length = fabs(dx_sum - dx);
+				*intersection_x = x;
+				*intersection_y = cub->player.pos.y
+					+ sin(degree_to_rad(degree_ray_angle)) * dx_sum;
+				// printf("wall hit dx\n");
 				return (ray_length);
 			}
 			return (ray_length);
@@ -300,6 +310,7 @@ t_vector	get_vector_from_length(double ray_length, double degree_angle)
 
 	ray.x = 0;
 	ray.y = 0;
+	// printf("degree angle = %f\n", degree_angle);
 	ray.x += ray_length * cos(degree_to_rad(degree_angle));
 	ray.y -= ray_length * sin(degree_to_rad(degree_angle));
 	// printf("ray x = %f y = %f\n", ray.x, ray.y);
@@ -312,18 +323,32 @@ int	create_trgb(int t, int r, int g, int b)
 }
 
 int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
-		int *color_arr, int ray_length)
+		double distance)
 {
-	int	start_y;
-	int	end_y;
-	int	screen_half;
-	int	proj_half;
-	int	i;
+	double	start_y;
+	double	end_y;
+	double	screen_half;
+	double	proj_half;
+	int		color;
+	int		i;
 
-	screen_half = SCREEN_HEIGHT / 2;
-	proj_half = proj_height / 2;
+	// double	mod_var;
+	screen_half = (double)SCREEN_HEIGHT / (double)2;
+	proj_half = proj_height / (double)2;
 	start_y = screen_half - proj_half;
 	end_y = screen_half + proj_half;
+	// printf("start y = %f end y = %f\n", start_y, end_y);
+	// if (modf(start_y, &mod_var) > 0.5)
+	// 	start_y = ceil(start_y);
+	// else
+	// 	start_y = floor(start_y);
+	// if (modf(end_y, &mod_var) > 0.5)
+	// 	end_y = ceil(end_y);
+	// else
+	// 	end_y = floor(end_y);
+	// printf("start y = %f end y = %f\n", start_y, end_y);
+	// printf("casted start y = %d cast end y = %d\n", (int)start_y,
+	// (int)end_y);
 	i = 0;
 	while (i < SCREEN_HEIGHT)
 	{
@@ -335,14 +360,8 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 		}
 		while (i < end_y && i < SCREEN_HEIGHT)
 		{
-			if (ray_length >= color_arr[0] && ray_length <= color_arr[1])
-				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255));
-			else if (ray_length >= color_arr[1] && ray_length <= color_arr[2])
-				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.75));
-			else if (ray_length >= color_arr[2] && ray_length <= color_arr[3])
-				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.50));
-			else
-				img_pix_put(img, x, i, create_trgb(0, 0, 0, 255 * 0.25));
+			color = create_trgb(0, 0, 0, 255 * fabs(1 - (distance / 15)));
+			img_pix_put(img, x, i, color);
 			i++;
 		}
 		img_pix_put(img, x, i, cub->f_color);
@@ -353,39 +372,45 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 
 int	shoot_rays(t_mlx_img *img, t_cub *cub)
 {
-	int		color_arr[4];
-	int		arr_size;
 	double	ray_length;
 	int		i;
+	double	intersection_x;
+	double	intersection_y;
 	double	angle;
 	double	ray_inc;
 	double	distance_to_proj_plane;
 	double	proj_height;
 	double	relative_angle;
 
-	i = SCREEN_WIDTH - 1;
-	arr_size = get_arr_size(cub->map);
-	color_arr[0] = arr_size / 4;
-	color_arr[1] = arr_size / 4 * 2;
-	color_arr[2] = arr_size / 4 * 3;
-	color_arr[3] = arr_size;
+	i = SCREEN_WIDTH;
 	ray_inc = (double)FOV / (double)SCREEN_WIDTH;
-	angle = cub->player.angle - (FOV / 2);
+	angle = cub->player.angle - (double)(FOV / 2);
 	distance_to_proj_plane = (SCREEN_WIDTH / 2) / tan(degree_to_rad(FOV / 2));
-	relative_angle = FOV / 2;
+	relative_angle = (double)FOV / (double)2;
 	while (i >= 0)
 	{
 		angle += ray_inc;
 		if (angle < 0)
-			angle += 360;
+			angle += (double)360;
 		else if (angle > 360)
-			angle -= 360;
-		ray_length = find_ray_length(cub, angle);
+			angle -= (double)360;
+		// printf("angle = %f\n", angle);
+		ray_length = find_ray_length(cub, angle, &intersection_x,
+				&intersection_y);
+        printf("intersection x = %f y = %f\n", intersection_x, intersection_y);
 		// printf("ray length = %f\n", ray_length);
+		/////////////////////////////
+		// t_vector ray = get_vector_from_length(ray_length, angle);
+		// draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
+		// 		ray), get_arr_size(cub->map));
+		////////////////////////////////
 		relative_angle -= ray_inc;
+		// printf("relative angle = %f\n", relative_angle);
+		// relative_angle = fabs(relative_angle);
 		proj_height = distance_to_proj_plane / (ray_length
 				* cos(degree_to_rad(relative_angle)));
-		draw_vertical_slice(img, cub, i, proj_height, color_arr, ray_length);
+		// printf("proj height = %f\n", proj_height);
+		draw_vertical_slice(img, cub, i, proj_height, ray_length);
 		i--;
 	}
 	return (0);
@@ -401,9 +426,9 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 // 	double		ray_inc;
 
 // 	arr_size = get_arr_size(cub->map);
-// 	i = 0;
+// 	i = SCREEN_HEIGHT - 1;
 // 	// printf("==================\n");
-// 	ray_inc = FOV / 60;
+// 	ray_inc = (double)FOV / (SCREEN_WIDTH);
 // 	// printf("ray inc = %f\n", ray_inc);
 // 	angle = cub->player.angle - (FOV / 2);
 // 	printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
@@ -428,9 +453,9 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 int	refresh_raycasting(t_cub *cub)
 {
 	t_mlx_img	*img;
-	int			arr_size;
 
-	arr_size = get_arr_size(cub->map);
+	// int			arr_size;
+	// arr_size = get_arr_size(cub->map);
 	img = init_img(&cub->mlx_data);
 	if (!img)
 		return (error_exit(NULL), -1);
@@ -445,6 +470,9 @@ int	refresh_raycasting(t_cub *cub)
 
 int	start_mlx(int height, int width, t_cub *cub)
 {
+	int	texture_width;
+	int	texture_height;
+
 	cub->mlx_data.mlx_ptr = mlx_init();
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
@@ -454,6 +482,10 @@ int	start_mlx(int height, int width, t_cub *cub)
 			"cub3D");
 	if (!cub->mlx_data.win_ptr)
 		return (-1);
+	cub->texture = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
+			"./src/walkstone.xpm", &texture_width, &texture_height);
+	if (!cub->texture)
+		return (printf("texture error"), -1);
 	start_raycasting(&cub->mlx_data, cub);
 	// mlx_key_hook(cub->mlx_data.win_ptr, handle_keyboard_inputs, cub);
 	mlx_hook(cub->mlx_data.win_ptr, 2, (1L << 0), handle_keyboard_inputs, cub);

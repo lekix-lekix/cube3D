@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/11 14:25:58 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:35:58 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@
 # define DOWN 65364
 # define RIGHT 65363
 # define ESCAPE 65307
-# define ONE_UNIT 50
+# define ONE_UNIT 64
 # define FOV 60
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
-# define SCREEN_WIDTH 800
+# define SCREEN_WIDTH 1600
 # define SCREEN_HEIGHT 600
 
 typedef struct s_window_mlx
@@ -86,6 +86,7 @@ typedef struct s_cub
 	int				c_color;
 	int				f_color;
 	char			**map;
+    t_mlx_img       *texture;
 	t_window_mlx	mlx_data;
 	t_player		player;
 }					t_cub;
@@ -111,7 +112,7 @@ int					start_raycasting(t_window_mlx *data, t_cub *cub);
 int					refresh_raycasting(t_cub *cub);
 t_vector			rotate_vector(t_vector vec, double angle);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
-double				degree_to_rad(int degree);
+double				degree_to_rad(double degree);
 
 // Handle keyboard inputs
 int					handle_keyboard_inputs(int key, t_cub *cub);
