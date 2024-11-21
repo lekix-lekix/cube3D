@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/20 18:36:43 by lekix            ###   ########.fr       */
+/*   Updated: 2024/11/21 16:40:28 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle,
 				*intersection_x = cub->player.pos.x
 					+ cos(degree_to_rad(degree_ray_angle)) * dy_sum;
 				*intersection_y = y;
-                printf("mod x = %f\n", fmod(*intersection_x, 1.0));
+				// printf("mod x = %f\n", fmod(*intersection_x, 1.0));
 				// printf("wall hit dy\n");
 				return (ray_length);
 			}
@@ -322,6 +322,11 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
+int	create_trgb_struct(t_color color)
+{
+	return (color.t << 24 | color.r << 16 | color.g << 8 | color.b);
+}
+
 int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 		double distance)
 {
@@ -330,6 +335,7 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 	double	screen_half;
 	double	proj_half;
 	int		color;
+	double	shading;
 	int		i;
 
 	// double	mod_var;
@@ -337,35 +343,29 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 	proj_half = proj_height / (double)2;
 	start_y = screen_half - proj_half;
 	end_y = screen_half + proj_half;
-	// printf("start y = %f end y = %f\n", start_y, end_y);
-	// if (modf(start_y, &mod_var) > 0.5)
-	// 	start_y = ceil(start_y);
-	// else
-	// 	start_y = floor(start_y);
-	// if (modf(end_y, &mod_var) > 0.5)
-	// 	end_y = ceil(end_y);
-	// else
-	// 	end_y = floor(end_y);
-	// printf("start y = %f end y = %f\n", start_y, end_y);
-	// printf("casted start y = %d cast end y = %d\n", (int)start_y,
-	// (int)end_y);
+	shading = fabs(1 - (distance / 20));
 	i = 0;
+	// printf("shading = %f\n", shading);
 	while (i < SCREEN_HEIGHT)
 	{
 		// printf("x = %d, i = %d\n", x, i);
 		while (i < start_y && i < SCREEN_HEIGHT)
 		{
-			img_pix_put(img, x, i, cub->c_color);
+			img_pix_put(img, x, i, create_trgb_struct(cub->c_color));
 			i++;
 		}
 		while (i < end_y && i < SCREEN_HEIGHT)
 		{
-			color = create_trgb(0, 0, 0, 255 * fabs(1 - (distance / 15)));
+			// printf("color = %f\n", distance);
+			if (distance > 20)
+				color = create_trgb(0, 0, 0, 0);
+			else
+				color = create_trgb(0, 0, 0, 255 * shading);
 			img_pix_put(img, x, i, color);
 			i++;
 		}
-		img_pix_put(img, x, i, cub->f_color);
-		i++;
+		img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
+        i++;
 	}
 	return (0);
 }
@@ -394,22 +394,11 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 			angle += (double)360;
 		else if (angle > 360)
 			angle -= (double)360;
-		// printf("angle = %f\n", angle);
 		ray_length = find_ray_length(cub, angle, &intersection_x,
 				&intersection_y);
-        printf("intersection x = %f y = %f\n", intersection_x, intersection_y);
-		// printf("ray length = %f\n", ray_length);
-		/////////////////////////////
-		// t_vector ray = get_vector_from_length(ray_length, angle);
-		// draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
-		// 		ray), get_arr_size(cub->map));
-		////////////////////////////////
 		relative_angle -= ray_inc;
-		// printf("relative angle = %f\n", relative_angle);
-		// relative_angle = fabs(relative_angle);
 		proj_height = distance_to_proj_plane / (ray_length
 				* cos(degree_to_rad(relative_angle)));
-		// printf("proj height = %f\n", proj_height);
 		draw_vertical_slice(img, cub, i, proj_height, ray_length);
 		i--;
 	}

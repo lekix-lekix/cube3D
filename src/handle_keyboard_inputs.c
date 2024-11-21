@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keyboard_inputs.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/20 16:16:06 by lekix            ###   ########.fr       */
+/*   Updated: 2024/11/21 17:32:03 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,34 @@ int	move_direction_right(t_cub *cub)
 	else
 		cub->player.angle -= 2;
 	cub->player.dir = rotate_vector(cub->player.dir, degree_to_rad(1));
+	refresh_raycasting(cub);
+	return (0);
+}
+
+int	strafe(int key, t_cub *cub)
+{
+	double	next_pos_x;
+	double	next_pos_y;
+	double	angle;
+
+	if (key == D)
+	{
+		angle = cub->player.angle - (double)90;
+		if (angle < 0)
+			angle = fmod(angle, 360);
+		next_pos_x = cub->player.pos.x + (cos(degree_to_rad(angle)) * 0.1);
+		next_pos_y = cub->player.pos.y - (sin(degree_to_rad(angle)) * 0.1);
+	}
+	else
+	{
+		angle = cub->player.angle - (double)90;
+		if (angle > 360)
+			angle = fmod(angle, 360);
+		next_pos_x = cub->player.pos.x - cos(degree_to_rad(angle)) * 0.1;
+		next_pos_y = cub->player.pos.y + sin(degree_to_rad(angle)) * 0.1;
+	}
+	cub->player.pos.x = next_pos_x;
+	cub->player.pos.y = next_pos_y;
 	refresh_raycasting(cub);
 	return (0);
 }
@@ -82,10 +110,8 @@ int	handle_keyboard_inputs(int key, t_cub *cub)
 		return (change_direction(key, cub));
 	else if (key == W || key == S)
 		return (move_character_in_direction(key, cub));
-	else if (key == A)
-		return (move_character_left(cub));
-	else if (key == D)
-		return (move_character_right(cub));
+	else if (key == A || key == D)
+		return (strafe(key, cub));
 	else if (key == ESCAPE)
 		return (quit_cube(cub));
 	return (0);

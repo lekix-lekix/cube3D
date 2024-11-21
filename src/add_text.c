@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:22:17 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/17 11:52:40 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:37:52 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	add_texture(char **split_elem, t_list *file_content, t_list *start,
 		get_color(split_elem, start, cub, 'C');
 	if (split_elem && ft_strncmp(split_elem[0], "F", 2) == 0)
 		get_color(split_elem, start, cub, 'F');
+    cub->c_color.t = 0;
 	free_tab(split_elem);
 }
 

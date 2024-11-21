@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/21 15:56:17 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:06:25 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ void	elems_check(char **split_elem, t_list *start, t_cub *cub)
 		texture_error(split_elem, start, cub, "SO texture missing.");
 	if (!cub->we_text)
 		texture_error(split_elem, start, cub, "WE texture missing.");
-	if (cub->c_color < 0)
-		texture_error(split_elem, start, cub, "C color missing.");
-	if (cub->f_color < 0)
-		texture_error(split_elem, start, cub, "F color missing.");
+	// if (cub->c_color < 0)
+	// 	texture_error(split_elem, start, cub, "C color missing.");
+	// if (cub->f_color < 0)
+	// 	texture_error(split_elem, start, cub, "F color missing.");
 }
 
 bool	get_elems(t_list *file_content, t_cub *cub, t_list *start)
