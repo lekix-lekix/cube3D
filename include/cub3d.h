@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/21 14:19:51 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:32:26 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define DOWN 65364
 # define RIGHT 65363
 # define ESCAPE 65307
-# define ONE_UNIT 64
+# define ONE_UNIT 16
 # define FOV 60
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
@@ -111,7 +111,9 @@ int					ft_is_space(char c);
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
 t_mlx_img			*init_img(t_window_mlx *data);
+int					*get_pixel_from_img(t_mlx_img *img, int x, int y);
 void				img_pix_put(t_mlx_img *img, int x, int y, int color);
+t_mlx_img			*init_texture(t_cub *cub, char *path);
 void				drawLine(int x0, int y0, int x1, int y1, int c,
 						t_mlx_img *img);
 

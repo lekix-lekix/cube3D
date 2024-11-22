@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/21 16:40:28 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/22 18:19:18 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,11 @@ void	ft_swap(double *a, double *b)
 	*b = tmp;
 }
 
+int	create_trgb(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
 int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
 {
 	start = coordinates_to_px(start.x, start.y, arr_size);
@@ -148,7 +153,8 @@ int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
 	start.y = round(start.y);
 	end.x = round(end.x);
 	end.y = round(end.y);
-	drawLine((int)start.x, (int)start.y, (int)end.x, (int)end.y, 0x008000, img);
+	drawLine((int)start.x, (int)start.y, (int)end.x, (int)end.y, create_trgb(0,
+			0, 255, 0), img);
 	return (0);
 }
 
@@ -265,10 +271,11 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle,
 			{
 				ray_length = fabs(dy_sum - dy);
 				*intersection_x = cub->player.pos.x
-					+ cos(degree_to_rad(degree_ray_angle)) * dy_sum;
+					+ cos(degree_to_rad(degree_ray_angle)) * (dy_sum - dy);
 				*intersection_y = y;
+				// printf("wall hit dy intersection x = %f y = %f\n",
+				// *intersection_x, *intersection_y);
 				// printf("mod x = %f\n", fmod(*intersection_x, 1.0));
-				// printf("wall hit dy\n");
 				return (ray_length);
 			}
 			else
@@ -276,8 +283,9 @@ double	find_ray_length(t_cub *cub, double degree_ray_angle,
 				ray_length = fabs(dx_sum - dx);
 				*intersection_x = x;
 				*intersection_y = cub->player.pos.y
-					+ sin(degree_to_rad(degree_ray_angle)) * dx_sum;
-				// printf("wall hit dx\n");
+					- (sin(degree_to_rad(degree_ray_angle)) * (dx_sum - dx));
+				// printf("wall hit dx intersection x = %f y = %f\n",
+				// *intersection_x, *intersection_y);
 				return (ray_length);
 			}
 			return (ray_length);
@@ -317,27 +325,42 @@ t_vector	get_vector_from_length(double ray_length, double degree_angle)
 	return (ray);
 }
 
-int	create_trgb(int t, int r, int g, int b)
-{
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
 int	create_trgb_struct(t_color color)
 {
 	return (color.t << 24 | color.r << 16 | color.g << 8 | color.b);
 }
 
+t_color	extract_rgb(int color_int)
+{
+	t_color	color;
+
+	color.r = (color_int & 0xFF000000) >> 24;
+	color.g = (color_int & 0x00FF0000) >> 16;
+	color.b = (color_int & 0x0000FF00) >> 8;
+	return (color);
+}
+
 int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
-		double distance)
+		double distance, double inter_x, double inter_y)
 {
 	double	start_y;
 	double	end_y;
 	double	screen_half;
 	double	proj_half;
 	int		color;
+	t_color	full_color;
 	double	shading;
+	double	scaling_factor;
+	double	texture_idx;
+	double	texture_x;
+	double	modf_var_x;
+	double	modf_var_y;
 	int		i;
 
+	(void)inter_x;
+	(void)inter_y;
+	(void)texture_idx;
+	(void)color;
 	// double	mod_var;
 	screen_half = (double)SCREEN_HEIGHT / (double)2;
 	proj_half = proj_height / (double)2;
@@ -345,7 +368,19 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 	end_y = screen_half + proj_half;
 	shading = fabs(1 - (distance / 20));
 	i = 0;
-	// printf("shading = %f\n", shading);
+	// printf("inter x = %f y = %f\n", inter_x, inter_y);
+	scaling_factor = (end_y - start_y) / 64;
+	// printf("texture px = %f\n", scaling_factor);
+	inter_x = modf(inter_x, &modf_var_x);
+	if (!inter_x)
+		inter_x = modf(inter_y, &modf_var_y);
+	texture_x = inter_x * 64;
+	if (modf(texture_x, &modf_var_x) > 0.5)
+		texture_x = ceil(texture_x);
+	else
+		texture_x = floor(texture_x);
+	// printf("inter_x = %f\n", inter_x);
+	// printf("texture x = %f\n", texture_x);
 	while (i < SCREEN_HEIGHT)
 	{
 		// printf("x = %d, i = %d\n", x, i);
@@ -356,21 +391,34 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 		}
 		while (i < end_y && i < SCREEN_HEIGHT)
 		{
-			// printf("color = %f\n", distance);
-			if (distance > 20)
-				color = create_trgb(0, 0, 0, 0);
+			// texture_idx =
+			// // printf("color = %f\n", distance);
+			texture_idx = (i - start_y) / scaling_factor;
+			if (modf(texture_idx, &modf_var_y) > 0.5 && texture_idx < 63)
+				texture_idx = ceil(texture_idx);
 			else
-				color = create_trgb(0, 0, 0, 255 * shading);
+				texture_idx = floor(texture_idx);
+			color = *get_pixel_from_img(cub->texture, texture_x, texture_idx);
+			full_color = extract_rgb(color);
+			color = create_trgb(0, full_color.r * shading, full_color.g
+					* shading, full_color.b * shading);
 			img_pix_put(img, x, i, color);
+			// printf("texture indx = %f\n", texture_idx);
+			// printf("texture idx = %f\n", texture_idx);
+			// if (distance > 20)
+			// 	color = create_trgb(0, 0, 0, 0);
+			// else
+			// 	color = create_trgb(0, 0, 0, 255 * shading);
+			// img_pix_put(img, x, i, color);
 			i++;
 		}
 		img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
-        i++;
+		i++;
 	}
 	return (0);
 }
 
-int	shoot_rays(t_mlx_img *img, t_cub *cub)
+int	shoot_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 {
 	double	ray_length;
 	int		i;
@@ -382,10 +430,11 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 	double	proj_height;
 	double	relative_angle;
 
+	// t_vector	ray;
 	i = SCREEN_WIDTH;
 	ray_inc = (double)FOV / (double)SCREEN_WIDTH;
 	angle = cub->player.angle - (double)(FOV / 2);
-	distance_to_proj_plane = (SCREEN_WIDTH / 2) / tan(degree_to_rad(FOV / 2));
+	distance_to_proj_plane = (SCREEN_WIDTH / 5) / tan(degree_to_rad(FOV / 2));
 	relative_angle = (double)FOV / (double)2;
 	while (i >= 0)
 	{
@@ -399,7 +448,9 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 		relative_angle -= ray_inc;
 		proj_height = distance_to_proj_plane / (ray_length
 				* cos(degree_to_rad(relative_angle)));
-		draw_vertical_slice(img, cub, i, proj_height, ray_length);
+		map_rays[i] = get_vector_from_length(ray_length, angle);
+		draw_vertical_slice(img, cub, i, proj_height, ray_length,
+			intersection_x, intersection_y);
 		i--;
 	}
 	return (0);
@@ -439,9 +490,26 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub)
 // 	return (0);
 // }
 
+int	draw_map_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
+{
+	int	i;
+	int	arr_size;
+
+	i = SCREEN_WIDTH;
+	arr_size = get_arr_size(cub->map);
+	while (i >= 0)
+	{
+		draw_ray(img, cub->player.pos, get_pos_from_vector(cub->player.pos,
+				map_rays[i]), arr_size);
+		i--;
+	}
+	return (0);
+}
+
 int	refresh_raycasting(t_cub *cub)
 {
 	t_mlx_img	*img;
+	t_vector	*map_rays;
 
 	// int			arr_size;
 	// arr_size = get_arr_size(cub->map);
@@ -449,8 +517,12 @@ int	refresh_raycasting(t_cub *cub)
 	if (!img)
 		return (error_exit(NULL), -1);
 	// printf("player pos = x %f y %f\n", cub->player.pos.x, cub->player.pos.y);
-	// draw_map(img, cub->map);
-	shoot_rays(img, cub);
+	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
+	if (!map_rays)
+		return (error_exit(NULL), -1);
+	shoot_rays(img, cub, map_rays);
+	draw_map(img, cub->map);
+	draw_map_rays(img, cub, map_rays);
 	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
 		img->img_ptr, 0, 0);
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
@@ -459,9 +531,6 @@ int	refresh_raycasting(t_cub *cub)
 
 int	start_mlx(int height, int width, t_cub *cub)
 {
-	int	texture_width;
-	int	texture_height;
-
 	cub->mlx_data.mlx_ptr = mlx_init();
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
@@ -471,8 +540,7 @@ int	start_mlx(int height, int width, t_cub *cub)
 			"cub3D");
 	if (!cub->mlx_data.win_ptr)
 		return (-1);
-	cub->texture = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
-			"./src/walkstone.xpm", &texture_width, &texture_height);
+	cub->texture = init_texture(cub, "./src/walkstone.xpm");
 	if (!cub->texture)
 		return (printf("texture error"), -1);
 	start_raycasting(&cub->mlx_data, cub);
