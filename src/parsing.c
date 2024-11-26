@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/21 15:06:25 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:19:22 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 {
 	int		fd;
 	t_list	*file_content;
+	t_list	*current;
 
 	if (ac != 2)
 		map_error(-1, "This program takes one argument (the map).", NULL);
@@ -24,7 +25,7 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 	if (fd < 0) // perror ?
 		map_error(-1, "Can't open file.", NULL);
 	file_content = get_file(fd);
-    *start = file_content;
+	*start = file_content;
 	if (!file_content || ft_lstsize(file_content) < 8)
 		map_error(fd, "You should have 6 elements and 1 map in your file.",
 			file_content);
@@ -32,15 +33,14 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 		close(fd);
 	init_cub(cub);
 	get_elems(file_content, cub, *start);
-    skip_elements(&file_content);
+	skip_elements(&file_content);
 	cub->map = get_map(&file_content);
-    t_list *current;
-    current = file_content;
-    while (current)
-    {
-        printf("current = %s\n", current->content);
-        current = current->next;
-    }
+	current = file_content;
+	while (current)
+	{
+		printf("current = %s\n", current->content);
+		current = current->next;
+	}
 	check_map(cub);
 	free_list(*start);
 }

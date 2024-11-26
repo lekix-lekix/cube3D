@@ -6,28 +6,34 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/22 18:11:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:25:34 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-t_mlx_img	*init_texture(t_cub *cub, char *path)
+t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
 {
-	t_mlx_img	*img;
+	t_texture	*texture;
 	int			texture_width;
 	int			texture_height;
 
-	img = malloc(sizeof(t_mlx_img));
-	if (!img)
+	texture = malloc(sizeof(t_texture));
+	if (!texture)
 		return (error_exit(NULL), NULL);
-	img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr, path,
-			&texture_width, &texture_height);
-	if (!img->img_ptr)
+	texture->text_img = malloc(sizeof(t_mlx_img));
+	if (!texture->text_img)
 		return (error_exit(NULL), NULL);
-	img->img_addr = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->line_len,
-			&img->endian);
-	return (img);
+	texture->text_img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
+			path, &texture_width, &texture_height);
+	if (!texture->text_img->img_ptr)
+		return (error_exit(NULL), NULL);
+	texture->text_img->img_addr = mlx_get_data_addr(texture->text_img->img_ptr,
+			&texture->text_img->bpp, &texture->text_img->line_len,
+			&texture->text_img->endian);
+    texture->width = texture_width;
+    texture->height = texture_height;
+	return (texture);
 }
 
 t_mlx_img	*init_img(t_window_mlx *data)
@@ -49,11 +55,7 @@ int	*get_pixel_from_img(t_mlx_img *img, int x, int y)
 {
 	char	*pixel;
 
-	// int		pixel_int;
 	pixel = img->img_addr + (y * img->line_len + x * (img->bpp / 8));
-	// printf("texture bpp = %d\n", img->bpp);
-	// printf("line len = %d\n", img->line_len);
-	// printf("img = %s\n", img->img_addr);
 	return ((int *)pixel);
 }
 

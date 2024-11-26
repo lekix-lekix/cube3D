@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:29:44 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/15 17:07:04 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:40:01 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	free_line(char *line)
 
 void	free_cub(t_cub *cub)
 {
-	ft_free(cub->ea_text);
-	ft_free(cub->so_text);
-	ft_free(cub->no_text);
-	ft_free(cub->we_text);
+	free(cub->ea_text);
+	free(cub->so_text);
+	free(cub->no_text);
+	free(cub->we_text);
 	if (cub->map)
 		free_tab(cub->map);
 }

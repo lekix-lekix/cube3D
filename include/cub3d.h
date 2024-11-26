@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/22 15:32:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:12:22 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,18 @@ typedef struct s_position
 	double			y;
 }					t_position;
 
+typedef struct s_ray
+{
+	double			length;
+	double			intersection_x;
+	double			intersection_y;
+	double			angle;
+    double          angle_inc;
+	double			relative_angle;
+	double			proj_height;
+    double          distance_to_proj_plane;
+}					t_ray;
+
 typedef struct s_vector
 {
 	double			x;
@@ -85,16 +97,22 @@ typedef struct s_color
 	int				b;
 }					t_color;
 
+typedef struct s_texture
+{
+	t_mlx_img		*text_img;
+	int				width;
+	int				height;
+}					t_texture;
+
 typedef struct s_cub
 {
-	char			*no_text;
-	char			*so_text;
-	char			*ea_text;
-	char			*we_text;
+	t_texture		*no_text;
+	t_texture		*so_text;
+	t_texture		*ea_text;
+	t_texture		*we_text;
 	t_color			c_color;
 	t_color			f_color;
 	char			**map;
-	t_mlx_img		*texture;
 	t_window_mlx	mlx_data;
 	t_player		player;
 }					t_cub;
@@ -113,12 +131,14 @@ int					start_mlx(int height, int width, t_cub *cub);
 t_mlx_img			*init_img(t_window_mlx *data);
 int					*get_pixel_from_img(t_mlx_img *img, int x, int y);
 void				img_pix_put(t_mlx_img *img, int x, int y, int color);
-t_mlx_img			*init_texture(t_cub *cub, char *path);
+int					init_texture(char **tab, t_list *start, t_cub *cub,
+						t_texture **cub_text);
+t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
 void				drawLine(int x0, int y0, int x1, int y1, int c,
 						t_mlx_img *img);
 
 // Raycasting
-int					start_raycasting(t_window_mlx *data, t_cub *cub);
+int					start_raycasting(t_cub *cub);
 int					refresh_raycasting(t_cub *cub);
 t_vector			rotate_vector(t_vector vec, double angle);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
