@@ -1,7 +1,7 @@
-NO ./textures/walkstone.xpm
-SO ./textures/grass.xpm
-WE ./textures/leavesop.xpm
-EA ./textures/bookshelf.xpm
+NO ./textures/stones_extra_big.xpm
+SO ./textures/metal_big.xpm
+WE ./textures/concrete_big.xpm
+EA ./textures/grunge_big.xpm
 
 F 200,200,200
 C 135,206,235
@@ -17,7 +17,7 @@ C 135,206,235
 100000000101
 100000011111
 100000111111
-10S000000001
+10N000000001
 100000000001
 100000000001
 100000000001

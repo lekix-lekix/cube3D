@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/26 18:12:22 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:49:47 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,21 @@ typedef struct s_ray
 	double			intersection_x;
 	double			intersection_y;
 	double			angle;
-    double          angle_inc;
+	double			angle_inc;
 	double			relative_angle;
 	double			proj_height;
-    double          distance_to_proj_plane;
+	double			distance_to_proj_plane;
 }					t_ray;
+
+typedef struct s_dda_vars
+{
+	double			dx;
+	double			dx_sum;
+	double			dy;
+	double			dy_sum;
+	int				x;
+	int				y;
+}					t_dda_vars;
 
 typedef struct s_vector
 {
@@ -103,6 +113,14 @@ typedef struct s_texture
 	int				width;
 	int				height;
 }					t_texture;
+
+typedef struct s_texture_slice
+{
+	t_texture		*texture;
+	double			idx_x;
+	double			idx_y;
+	double			scaling;
+}					t_texture_slice;
 
 typedef struct s_cub
 {

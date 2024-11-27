@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/26 18:24:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:28:57 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,10 @@ int	draw_player(t_mlx_img *img, t_cub *cub)
 	t_position	dir;
 	int			arr_size;
 
-	// t_position	px_fov_l;
-	// t_position	px_fov_r;
-	// t_position	px_dir;
-	// t_position	px_player;
 	arr_size = get_arr_size(cub->map);
 	fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
 	fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
 	dir = get_pos_from_vector(cub->player.pos, cub->player.dir);
-	// px_fov_l = coordinates_to_px(fov_l.x, fov_l.y, arr_size);
-	// px_fov_r = coordinates_to_px(fov_r.x, fov_r.y, arr_size);
-	// px_dir = coordinates_to_px(dir.x, dir.y, arr_size);
-	// px_player = coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
-	// arr_size);
 	draw(img, coordinates_to_px(cub->player.pos.x, cub->player.pos.y,
 			arr_size));
 	draw(img, coordinates_to_px(fov_l.x, fov_l.y, arr_size));
@@ -197,105 +188,102 @@ int	start_raycasting(t_cub *cub)
 	return (0);
 }
 
-double	find_ray_length(t_cub *cub, t_ray *ray)
+void	init_dx_dy(t_dda_vars *vars, double angle)
 {
-	double	dx;
-	double	dy;
-	double	dx_sum;
-	double	dy_sum;
-	int		wall_hit;
-	int		x;
-	int		y;
-	double	ray_length;
-	int		last_inc;
+	if (angle == 360)
+		(*vars).dy = INFINITY;
+	else
+		(*vars).dy = fabs(1 / fabs(sin(degree_to_rad(angle))));
+	if (angle == 90)
+		(*vars).dx = INFINITY;
+	else
+		(*vars).dx = fabs(1 / fabs(cos(degree_to_rad(angle))));
+}
+
+void	init_dx_dy_sums(t_dda_vars *vars, t_position player_pos, double angle)
+{
 	double	modf_var;
 	double	modf_real;
 
-	if ((*ray).angle == 360)
-		dy = INFINITY;
-	else
-		dy = fabs(1 / fabs(sin(degree_to_rad((*ray).angle))));
-	if ((*ray).angle == 90)
-		dx = INFINITY;
-	else
-		dx = fabs(1 / fabs(cos(degree_to_rad((*ray).angle))));
-	x = cub->player.pos.x;
-	y = cub->player.pos.y;
-	if (modf(cub->player.pos.x, &modf_var))
+	modf_real = modf(player_pos.x, &modf_var);
+	if (modf_real)
 	{
-		if (modf(cub->player.pos.x, &modf_var))
-		{
-			modf_real = modf(cub->player.pos.x, &modf_var);
-			if ((*ray).angle < 90 || (*ray).angle > 270)
-				dx_sum = fabs((1 - modf_real) * dx);
-			else
-				dx_sum = fabs(modf_real * dx);
-		}
+		if (angle < 90 || angle > 270)
+			(*vars).dx_sum = fabs((1 - modf_real) * (*vars).dx);
 		else
-		{
-			dx_sum = fabs(dx);
-			x -= 1;
-		}
+			(*vars).dx_sum = fabs(modf_real * (*vars).dx);
 	}
 	else
-		dx_sum = fabs(dx);
-	if (modf(cub->player.pos.y, &modf_var))
+		(*vars).dx_sum = fabs((*vars).dx);
+	if (modf(player_pos.y, &modf_var))
 	{
-		if (modf(cub->player.pos.y, &modf_var))
-		{
-			modf_real = modf(cub->player.pos.y, &modf_var);
-			if ((*ray).angle > 180)
-				dy_sum = fabs((1 - modf_real) * dy);
-			else
-				dy_sum = fabs(modf_real * dy);
-		}
+		modf_real = modf(player_pos.y, &modf_var);
+		if (angle > 180)
+			(*vars).dy_sum = fabs((1 - modf_real) * (*vars).dy);
 		else
-			dy_sum = fabs(dy);
+			(*vars).dy_sum = fabs(modf_real * (*vars).dy);
 	}
 	else
-		dy_sum = fabs(dy);
-	wall_hit = 0;
+		(*vars).dy_sum = fabs((*vars).dy);
+}
+
+double	wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
+		int last_inc)
+{
+	if (last_inc == 0)
+	{
+		(*ray).intersection_x = player_pos.x + cos(degree_to_rad((*ray).angle))
+			* (vars.dy_sum - vars.dy);
+		(*ray).intersection_y = vars.y;
+		return (fabs(vars.dy_sum - vars.dy));
+	}
+	else
+	{
+		(*ray).intersection_x = vars.x;
+		(*ray).intersection_y = player_pos.y - (sin(degree_to_rad((*ray).angle))
+				* (vars.dx_sum - vars.dx));
+		return (fabs(vars.dx_sum - vars.dx));
+	}
+}
+
+int	inc_dx_sum(t_dda_vars *vars, t_ray *ray)
+{
+	if ((*ray).angle > 180 && (*ray).angle <= 359)
+		(*vars).y++;
+	else
+		(*vars).y--;
+	(*vars).dy_sum += (*vars).dy;
+	return (0);
+}
+
+int	inc_dy_sum(t_dda_vars *vars, t_ray *ray)
+{
+	if ((*ray).angle > 90 && (*ray).angle <= 270)
+		(*vars).x--;
+	else
+		(*vars).x++;
+	(*vars).dx_sum += (*vars).dx;
+	return (1);
+}
+
+double	find_ray_length(t_cub *cub, t_ray *ray)
+{
+	t_dda_vars	dda_vars;
+	int			last_inc;
+
+	init_dx_dy(&dda_vars, (*ray).angle);
+	init_dx_dy_sums(&dda_vars, cub->player.pos, (*ray).angle);
 	last_inc = -1;
-	while (!wall_hit && x >= 0 && y >= 0)
+	dda_vars.x = cub->player.pos.x;
+	dda_vars.y = cub->player.pos.y;
+	while (dda_vars.x >= 0 && dda_vars.y >= 0)
 	{
-		if (cub->map[y][x] == '1')
-		{
-			if (last_inc == 0)
-			{
-				ray_length = fabs(dy_sum - dy);
-				(*ray).intersection_x = cub->player.pos.x
-					+ cos(degree_to_rad((*ray).angle)) * (dy_sum - dy);
-				(*ray).intersection_y = y;
-				return (ray_length);
-			}
-			else
-			{
-				ray_length = fabs(dx_sum - dx);
-				(*ray).intersection_x = x;
-				(*ray).intersection_y = cub->player.pos.y
-					- (sin(degree_to_rad((*ray).angle)) * (dx_sum - dx));
-				return (ray_length);
-			}
-			return (ray_length);
-		}
-		if (dx_sum > dy_sum)
-		{
-			if ((*ray).angle > 180 && (*ray).angle <= 359)
-				y++;
-			else
-				y--;
-			dy_sum += dy;
-			last_inc = 0;
-		}
+		if (cub->map[dda_vars.y][dda_vars.x] == '1')
+			return (wall_hit(ray, cub->player.pos, dda_vars, last_inc));
+		if (dda_vars.dx_sum > dda_vars.dy_sum)
+			last_inc = inc_dx_sum(&dda_vars, ray);
 		else
-		{
-			if ((*ray).angle > 90 && (*ray).angle <= 270)
-				x--;
-			else
-				x++;
-			dx_sum += dx;
-			last_inc = 1;
-		}
+			last_inc = inc_dy_sum(&dda_vars, ray);
 	}
 	return (-1);
 }
@@ -306,10 +294,8 @@ t_vector	get_vector_from_length(double ray_length, double degree_angle)
 
 	ray.x = 0;
 	ray.y = 0;
-	// printf("degree angle = %f\n", degree_angle);
 	ray.x += ray_length * cos(degree_to_rad(degree_angle));
 	ray.y -= ray_length * sin(degree_to_rad(degree_angle));
-	// printf("ray x = %f y = %f\n", ray.x, ray.y);
 	return (ray);
 }
 
@@ -328,91 +314,88 @@ t_color	extract_rgb(int color_int)
 	return (color);
 }
 
-t_texture	*pick_texture(t_cub *cub, double angle, char wall)
+void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 {
-	if (wall == 'H')
+	double	modf_var_x;
+	double	modf_var_y;
+
+	(*ray).intersection_x = modf((*ray).intersection_x, &modf_var_x);
+	if (!ray->intersection_x)
 	{
-		if (angle >= 180 && angle <= 360 && wall == 'H')
-			return (cub->no_text);
+		(*ray).intersection_x = modf((*ray).intersection_y, &modf_var_y);
+		if ((*ray).angle >= 90 && (*ray).angle <= 270)
+			slice->texture = cub->we_text;
 		else
-			return (cub->so_text);
+			slice->texture = cub->ea_text;
 	}
 	else
 	{
-		if (angle >= 90 && angle <= 270)
-			return (cub->we_text);
+		if ((*ray).angle >= 180 && (*ray).angle <= 360)
+			slice->texture = cub->so_text;
 		else
-			return (cub->ea_text);
+			slice->texture = cub->no_text;
 	}
+	slice->idx_x = ray->intersection_x * slice->texture->width; // texture width
+	if (modf(slice->idx_x, &modf_var_x) > 0.5)
+		slice->idx_x = ceil(slice->idx_x);
+	else
+		slice->idx_x = floor(slice->idx_x);
 }
 
-// int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x,
-// double proj_height,
-// double distance, double inter_x, double inter_y, int angle)
+int	pick_slice_color(t_texture_slice *slice, t_ray *ray, int i, int start_y_px)
+{
+	double	modf_var_y;
+	t_color	slice_color;
+	double	shading;
+	int		color;
+
+	shading = fabs(1 - ((*ray).length / 20));
+	(*slice).idx_y = (i - start_y_px) / (*slice).scaling;
+	if (modf((*slice).idx_y, &modf_var_y) > 0.5 && (*slice).idx_y < 63)
+		(*slice).idx_y = ceil((*slice).idx_y);
+	else
+		(*slice).idx_y = floor((*slice).idx_y);
+	// printf("x = %f, y = %f\n", (*slice).idx_x, (*slice).idx_y);
+	if ((*slice).idx_y > 1174)
+		color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
+				1174);
+	else
+		color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
+				(*slice).idx_y);
+	slice_color = extract_rgb(color);
+	color = create_trgb(0, slice_color.r * shading, slice_color.g * shading,
+			slice_color.b * shading);
+	return (color);
+}
+
 int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 		t_ray ray)
 {
-	double		start_y;
-	double		end_y;
-	double		screen_half;
-	double		proj_half;
-	int			color;
-	t_color		full_color;
-	double		shading;
-	double		scaling_factor;
-	double		texture_idx;
-	double		texture_x;
-	double		modf_var_x;
-	double		modf_var_y;
-	t_texture	*texture;
-	char		wall;
-	int			i;
+	double			start_y_px;
+	double			end_y_px;
+	t_texture_slice	slice;
+	int				i;
 
-	screen_half = (double)SCREEN_HEIGHT / (double)2;
-	proj_half = proj_height / (double)2;
-	start_y = screen_half - proj_half;
-	end_y = screen_half + proj_half;
-	shading = fabs(1 - (ray.length / 20));
-	i = 0;
-	scaling_factor = (end_y - start_y) / 64;
-	ray.intersection_x = modf(ray.intersection_x, &modf_var_x);
-	if (!ray.intersection_x)
+	start_y_px = ((double)SCREEN_HEIGHT / (double)2) - (proj_height
+			/ (double)2);
+	end_y_px = ((double)SCREEN_HEIGHT / (double)2) + (proj_height / (double)2);
+	pick_texture_slice(cub, &ray, &slice);
+	slice.scaling = (end_y_px - start_y_px) / slice.texture->height;
+	i = -1;
+	while (++i < SCREEN_HEIGHT)
 	{
-		ray.intersection_x = modf(ray.intersection_y, &modf_var_y);
-		wall = 'V';
-	}
-	else
-		wall = 'H';
-	texture_x = ray.intersection_x * 64;
-	if (modf(texture_x, &modf_var_x) > 0.5)
-		texture_x = ceil(texture_x);
-	else
-		texture_x = floor(texture_x);
-	while (i < SCREEN_HEIGHT)
-	{
-		while (i < start_y && i < SCREEN_HEIGHT)
+		while (i < start_y_px && i < SCREEN_HEIGHT)
 		{
 			img_pix_put(img, x, i, create_trgb_struct(cub->c_color));
 			i++;
 		}
-		while (i < end_y && i < SCREEN_HEIGHT)
+		while (i < end_y_px && i < SCREEN_HEIGHT)
 		{
-			texture_idx = (i - start_y) / scaling_factor;
-			if (modf(texture_idx, &modf_var_y) > 0.5 && texture_idx < 63)
-				texture_idx = ceil(texture_idx);
-			else
-				texture_idx = floor(texture_idx);
-			texture = pick_texture(cub, ray.angle, wall);
-			color = *get_pixel_from_img(texture->text_img, texture_x,
-					texture_idx);
-			full_color = extract_rgb(color);
-			color = create_trgb(0, full_color.r * shading, full_color.g
-					* shading, full_color.b * shading);
-			img_pix_put(img, x, i, color);
+			img_pix_put(img, x, i, pick_slice_color(&slice, &ray, i,
+					start_y_px));
 			i++;
 		}
 		img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
-		i++;
 	}
 	return (0);
 }
