@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/27 17:49:47 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:48:41 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
 # define SCREEN_WIDTH 1600
-# define SCREEN_HEIGHT 600
+# define SCREEN_HEIGHT 800
 
 typedef struct s_window_mlx
 {
@@ -60,6 +60,17 @@ typedef struct s_position
 	double			x;
 	double			y;
 }					t_position;
+
+typedef struct s_movements
+{
+	bool			fwd;
+	bool			bwd;
+	bool			strafe_l;
+	bool			strafe_r;
+	bool			dir_l;
+	bool			dir_r;
+    int             buffer;
+}					t_movements;
 
 typedef struct s_ray
 {
@@ -128,9 +139,11 @@ typedef struct s_cub
 	t_texture		*so_text;
 	t_texture		*ea_text;
 	t_texture		*we_text;
+	t_texture		*sky;
 	t_color			c_color;
 	t_color			f_color;
 	char			**map;
+	t_movements		mov;
 	t_window_mlx	mlx_data;
 	t_player		player;
 }					t_cub;
@@ -166,8 +179,10 @@ double				degree_to_rad(double degree);
 int					handle_keyboard_inputs(int key, t_cub *cub);
 
 // Movement inputs
-int					move_character_up(t_cub *cub);
-int					move_character_down(t_cub *cub);
+int					move_character_in_direction(int key, t_cub *cub);
+int					strafe(int right, t_cub *cub);
+int					move_direction_left(t_cub *cub);
+int					move_direction_right(t_cub *cub);
 int					move_character_left(t_cub *cub);
 int					move_character_right(t_cub *cub);
 
@@ -197,10 +212,6 @@ void				init_cub(t_cub *cub);
 // add text
 void				add_texture(char **split_elem, t_list *file_content,
 						t_list *start, t_cub *cub);
-int					add_north(char **tab, t_list *start, t_cub *cub);
-int					add_south(char **tab, t_list *start, t_cub *cub);
-int					add_east(char **tab, t_list *start, t_cub *cub);
-int					add_west(char **tab, t_list *start, t_cub *cub);
 
 // get color
 int					get_int(char **split_elem, t_list *start, t_cub *cub,

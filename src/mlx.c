@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/27 18:28:57 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:32:58 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,9 @@ t_vector	find_dir(t_cub *cub)
 int	start_raycasting(t_cub *cub)
 {
 	find_player_init_pos(cub);
+	cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
+	if (!cub->sky)
+		return (error_exit(NULL), -1);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -335,37 +338,41 @@ void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 		else
 			slice->texture = cub->no_text;
 	}
-	slice->idx_x = ray->intersection_x * slice->texture->width; // texture width
+	slice->idx_x = ray->intersection_x * slice->texture->width;
 	if (modf(slice->idx_x, &modf_var_x) > 0.5)
 		slice->idx_x = ceil(slice->idx_x);
 	else
 		slice->idx_x = floor(slice->idx_x);
 }
 
+int	create_shaded_color(t_ray *ray, t_color color)
+{
+	double	shading;
+
+	if (ray->length > 20)
+		return (create_rgb(0, 0, 0));
+	shading = fabs(1 - ((*ray).length / 20));
+	return (create_trgb(0, color.r * shading, color.g * shading, color.b
+			* shading));
+}
+
 int	pick_slice_color(t_texture_slice *slice, t_ray *ray, int i, int start_y_px)
 {
 	double	modf_var_y;
-	t_color	slice_color;
-	double	shading;
 	int		color;
 
-	shading = fabs(1 - ((*ray).length / 20));
 	(*slice).idx_y = (i - start_y_px) / (*slice).scaling;
 	if (modf((*slice).idx_y, &modf_var_y) > 0.5 && (*slice).idx_y < 63)
 		(*slice).idx_y = ceil((*slice).idx_y);
 	else
 		(*slice).idx_y = floor((*slice).idx_y);
-	// printf("x = %f, y = %f\n", (*slice).idx_x, (*slice).idx_y);
-	if ((*slice).idx_y > 1174)
-		color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
-				1174);
-	else
-		color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
-				(*slice).idx_y);
-	slice_color = extract_rgb(color);
-	color = create_trgb(0, slice_color.r * shading, slice_color.g * shading,
-			slice_color.b * shading);
-	return (color);
+	if ((*slice).idx_x >= (*slice).texture->width)
+		(*slice).idx_x = (*slice).texture->width - 1;
+	if ((*slice).idx_y >= (*slice).texture->height)
+		(*slice).idx_y = (*slice).texture->height - 1;
+	color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
+			(*slice).idx_y);
+	return (create_shaded_color(ray, extract_rgb(color)));
 }
 
 int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
@@ -374,25 +381,28 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 	double			start_y_px;
 	double			end_y_px;
 	t_texture_slice	slice;
+	int				color;
 	int				i;
 
 	start_y_px = ((double)SCREEN_HEIGHT / (double)2) - (proj_height
 			/ (double)2);
 	end_y_px = ((double)SCREEN_HEIGHT / (double)2) + (proj_height / (double)2);
 	pick_texture_slice(cub, &ray, &slice);
-	slice.scaling = (end_y_px - start_y_px) / slice.texture->height;
+	slice.scaling = proj_height / slice.texture->height;
 	i = -1;
 	while (++i < SCREEN_HEIGHT)
 	{
 		while (i < start_y_px && i < SCREEN_HEIGHT)
 		{
-			img_pix_put(img, x, i, create_trgb_struct(cub->c_color));
+			img_pix_put(img, x, i, *get_pixel_from_img(cub->sky->text_img, x,
+					i));
+			// img_pix_put(img, x, i, create_trgb_struct(cub->c_color));
 			i++;
 		}
-		while (i < end_y_px && i < SCREEN_HEIGHT)
+		while (i < end_y_px && i < SCREEN_HEIGHT - 1)
 		{
-			img_pix_put(img, x, i, pick_slice_color(&slice, &ray, i,
-					start_y_px));
+			color = pick_slice_color(&slice, &ray, i, start_y_px);
+			img_pix_put(img, x, i, color);
 			i++;
 		}
 		img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
@@ -453,6 +463,23 @@ int	draw_map_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 	return (0);
 }
 
+int check_player_movements(t_cub *cub)
+{
+    if (cub->mov.fwd)
+        move_character_in_direction(1, cub);
+    if (cub->mov.bwd)
+        move_character_in_direction(0, cub);
+    if (cub->mov.strafe_r)
+        strafe(1, cub);
+    if (cub->mov.strafe_l)
+        strafe(0, cub);
+    if (cub->mov.dir_r)
+        move_direction_right(cub);
+    if (cub->mov.dir_l)
+        move_direction_left(cub);
+    return (0); 
+}
+
 int	refresh_raycasting(t_cub *cub)
 {
 	t_mlx_img	*img;
@@ -464,6 +491,7 @@ int	refresh_raycasting(t_cub *cub)
 	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
 	if (!map_rays)
 		return (error_exit(NULL), -1);
+    // check_player_movements(cub);
 	shoot_rays(img, cub, map_rays);
 	draw_map(img, cub->map);
 	draw_map_rays(img, cub, map_rays);

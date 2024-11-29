@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/27 18:39:16 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:22:18 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int	move_direction_right(t_cub *cub)
 	return (0);
 }
 
-int	strafe(int key, t_cub *cub)
+int	strafe(int right, t_cub *cub)
 {
 	double	next_pos_x;
 	double	next_pos_y;
 	double	angle;
 
-	if (key == D)
+	if (right == D)
 	{
 		angle = cub->player.angle - (double)90;
 		if (angle < 0)
@@ -71,13 +71,13 @@ int	change_direction(int key, t_cub *cub)
 	return (0);
 }
 
-int	move_character_in_direction(int key, t_cub *cub)
+int	move_character_in_direction(int fwd, t_cub *cub)
 {
 	double	next_pos_y;
 	double	next_pos_x;
 	double	modf_var;
 
-	if (key == W)
+	if (fwd)
 	{
 		next_pos_x = cub->player.pos.x + cos(degree_to_rad(cub->player.angle))
 			* 0.2;
@@ -91,7 +91,6 @@ int	move_character_in_direction(int key, t_cub *cub)
 		next_pos_y = cub->player.pos.y + sin(degree_to_rad(cub->player.angle))
 			* 0.2;
 	}
-	// printf("next pos x = %f y = %f\n", next_pos_x, next_po/s_y);
 	modf(next_pos_y, &modf_var);
 	if (cub->map[(int)next_pos_y][(int)cub->player.pos.x] == '1')
 	{
