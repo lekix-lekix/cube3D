@@ -6,16 +6,52 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/29 17:32:58 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:36:14 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
+void	tab_free(char **tab)
+{
+	int	i;
+
+	i = -1;
+	while (tab[++i])
+		free(tab[i]);
+	free(tab);
+}
+
+void	destroy_free_texture(t_cub *cub, t_texture *texture)
+{
+	mlx_destroy_image(cub->mlx_data.mlx_ptr, texture->text_img->img_ptr);
+	free(texture->text_img);
+	free(texture);
+}
+
+void	free_textures(t_cub *cub)
+{
+	if (cub->no_text)
+		destroy_free_texture(cub, cub->no_text);
+	if (cub->so_text)
+		destroy_free_texture(cub, cub->so_text);
+	if (cub->ea_text)
+		destroy_free_texture(cub, cub->ea_text);
+	if (cub->we_text)
+		destroy_free_texture(cub, cub->we_text);
+	if (cub->sky)
+		destroy_free_texture(cub, cub->sky);
+}
+
 int	quit_cube(t_cub *cub)
 {
-	(void)cub;
-	printf("quitting\n");
+	free_textures(cub);
+	mlx_destroy_image(cub->mlx_data.mlx_ptr, cub->sky->text_img->img_ptr);
+	if (cub->mlx_data.win_ptr)
+		mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);
+	mlx_destroy_display(cub->mlx_data.mlx_ptr);
+	free(cub->mlx_data.mlx_ptr);
+	tab_free(cub->map);
 	exit(0);
 	return (0);
 }
@@ -463,21 +499,29 @@ int	draw_map_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 	return (0);
 }
 
-int check_player_movements(t_cub *cub)
+int	check_player_movements(t_cub *cub)
 {
-    if (cub->mov.fwd)
-        move_character_in_direction(1, cub);
-    if (cub->mov.bwd)
-        move_character_in_direction(0, cub);
-    if (cub->mov.strafe_r)
-        strafe(1, cub);
-    if (cub->mov.strafe_l)
-        strafe(0, cub);
-    if (cub->mov.dir_r)
-        move_direction_right(cub);
-    if (cub->mov.dir_l)
-        move_direction_left(cub);
-    return (0); 
+	// printf("check movement buffer = %d\n", cub->mov.buffer);
+	// printf("fwd = %d\n", cub->mov.fwd);
+	// printf("bwd = %d\n", cub->mov.bwd);
+	// printf("strafe l = %d\n", cub->mov.strafe_l);
+	// printf("strafe r = %d\n", cub->mov.strafe_r);
+	// printf("dir l = %d\n", cub->mov.dir_l);
+	// printf("dir r = %d\n", cub->mov.dir_r);
+	if (cub->mov.fwd)
+		move_character_in_direction(1, cub);
+	if (cub->mov.bwd)
+		move_character_in_direction(0, cub);
+	if (cub->mov.strafe_r)
+		strafe(1, cub);
+	if (cub->mov.strafe_l)
+		strafe(0, cub);
+	if (cub->mov.dir_r)
+		move_direction_right(cub);
+	if (cub->mov.dir_l)
+		move_direction_left(cub);
+	refresh_raycasting(cub);
+	return (0);
 }
 
 int	refresh_raycasting(t_cub *cub)
@@ -491,26 +535,29 @@ int	refresh_raycasting(t_cub *cub)
 	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
 	if (!map_rays)
 		return (error_exit(NULL), -1);
-    // check_player_movements(cub);
 	shoot_rays(img, cub, map_rays);
 	draw_map(img, cub->map);
 	draw_map_rays(img, cub, map_rays);
 	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
 		img->img_ptr, 0, 0);
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
+	free(map_rays);
+	free(img);
+	// check_player_movements(cub);
 	return (0);
 }
 
 int	start_mlx(int height, int width, t_cub *cub)
 {
 	cub->mlx_data.mlx_ptr = mlx_init();
+	if (!cub->mlx_data.mlx_ptr)
+		return (error_exit(MEM_ERROR), -1);
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
-	if (!cub->mlx_data.mlx_ptr)
-		return (-1);
-	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
-			"cub3D");
+	// cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width,
+	// height,
+	// "cub3D ");
 	if (!cub->mlx_data.win_ptr)
-		return (-1);
+		return (error_exit(MEM_ERROR), -1);
 	return (0);
 }

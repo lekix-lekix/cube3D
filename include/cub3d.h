@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/29 16:48:41 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:34:43 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define PI_RAD 0.01745329251
 # define SCREEN_WIDTH 1600
 # define SCREEN_HEIGHT 800
+# define MEM_ERROR "Memory allocation failed"
 
 typedef struct s_window_mlx
 {
@@ -69,7 +70,7 @@ typedef struct s_movements
 	bool			strafe_r;
 	bool			dir_l;
 	bool			dir_r;
-    int             buffer;
+	int				buffer;
 }					t_movements;
 
 typedef struct s_ray
@@ -179,6 +180,7 @@ double				degree_to_rad(double degree);
 int					handle_keyboard_inputs(int key, t_cub *cub);
 
 // Movement inputs
+int					check_player_movements(t_cub *cub);
 int					move_character_in_direction(int key, t_cub *cub);
 int					strafe(int right, t_cub *cub);
 int					move_direction_left(t_cub *cub);
@@ -188,7 +190,7 @@ int					move_character_right(t_cub *cub);
 
 // Free functions
 int					quit_cube(t_cub *cub);
-int					error_exit(char *str);
+int					error_exit(char *str, t_cub *cub);
 void				exit_map_not_valid(t_cub *cub, int err);
 
 // Map
