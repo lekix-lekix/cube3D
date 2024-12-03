@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/21 17:07:04 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:43:25 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_lstsize_check_empty(t_list **lst)
 	return (i);
 }
 
-char	**get_map(t_list **file)
+char	**get_map(t_cub *cub, t_list **file)
 {
 	char	**map;
 	int		i;
@@ -36,7 +36,7 @@ char	**get_map(t_list **file)
 
 	map = malloc(sizeof(char *) * (ft_lstsize_check_empty(file) + 1));
 	if (!map)
-		return (error_exit(NULL), NULL);
+		return (error_exit(NULL, cub), NULL);
 	i = 0;
 	current = *file;
 	while (current)
@@ -45,7 +45,7 @@ char	**get_map(t_list **file)
 		{
 			map[i] = ft_strtrim(current->content, "\n");
 			if (!map[i])
-				return (free_arr_until_idx(map, i), error_exit(NULL), NULL);
+				return (free_arr_until_idx(map, i), error_exit(NULL, cub), NULL);
 			i++;
 		}
 		current = current->next;

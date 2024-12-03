@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:30:14 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/17 17:56:06 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:47:09 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	map_error(int fd, char *msg, t_list *file_content)
 		close(fd);
 	if (file_content)
 		free_list(file_content);
-	exit(EXIT_FAILURE);
 }
 
 void	texture_error(char **tab, t_list *start, t_cub *cub, char *msg)

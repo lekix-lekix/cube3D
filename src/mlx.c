@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/02 18:36:14 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:59:15 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ void	free_textures(t_cub *cub)
 int	quit_cube(t_cub *cub)
 {
 	free_textures(cub);
-	mlx_destroy_image(cub->mlx_data.mlx_ptr, cub->sky->text_img->img_ptr);
 	if (cub->mlx_data.win_ptr)
 		mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);
-	mlx_destroy_display(cub->mlx_data.mlx_ptr);
-	free(cub->mlx_data.mlx_ptr);
-	tab_free(cub->map);
+	if (cub->mlx_data.mlx_ptr)
+	{
+		mlx_destroy_display(cub->mlx_data.mlx_ptr);
+		free(cub->mlx_data.mlx_ptr);
+	}
+	if (cub->map)
+		tab_free(cub->map);
 	exit(0);
 	return (0);
 }
@@ -213,7 +216,7 @@ int	start_raycasting(t_cub *cub)
 	find_player_init_pos(cub);
 	cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
 	if (!cub->sky)
-		return (error_exit(NULL), -1);
+		return (error_exit(NULL, cub), -1);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -374,11 +377,7 @@ void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 		else
 			slice->texture = cub->no_text;
 	}
-	slice->idx_x = ray->intersection_x * slice->texture->width;
-	if (modf(slice->idx_x, &modf_var_x) > 0.5)
-		slice->idx_x = ceil(slice->idx_x);
-	else
-		slice->idx_x = floor(slice->idx_x);
+	slice->idx_x = round(ray->intersection_x * (double)slice->texture->width);
 }
 
 int	create_shaded_color(t_ray *ray, t_color color)
@@ -394,20 +393,24 @@ int	create_shaded_color(t_ray *ray, t_color color)
 
 int	pick_slice_color(t_texture_slice *slice, t_ray *ray, int i, int start_y_px)
 {
-	double	modf_var_y;
-	int		color;
+	int	color;
 
+	// double	modf_var_y;
 	(*slice).idx_y = (i - start_y_px) / (*slice).scaling;
-	if (modf((*slice).idx_y, &modf_var_y) > 0.5 && (*slice).idx_y < 63)
-		(*slice).idx_y = ceil((*slice).idx_y);
-	else
-		(*slice).idx_y = floor((*slice).idx_y);
+	// printf("slice y = %f round = %f\n", (*slice).idx_y,
+	// round((*slice).idx_y));
+	// if (modf((*slice).idx_y, &modf_var_y) > 0.5 && (*slice).idx_y < 63)
+	(*slice).idx_y = round((*slice).idx_y);
 	if ((*slice).idx_x >= (*slice).texture->width)
 		(*slice).idx_x = (*slice).texture->width - 1;
 	if ((*slice).idx_y >= (*slice).texture->height)
 		(*slice).idx_y = (*slice).texture->height - 1;
+	if ((*slice).idx_y < 0)
+		(*slice).idx_y = 0;
+	// printf("slice x = %f y = %f\n", (*slice).idx_x, (*slice).idx_y);
 	color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
 			(*slice).idx_y);
+    // printf("hey there\n");
 	return (create_shaded_color(ray, extract_rgb(color)));
 }
 
@@ -422,9 +425,15 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 
 	start_y_px = ((double)SCREEN_HEIGHT / (double)2) - (proj_height
 			/ (double)2);
+	if (start_y_px > SCREEN_HEIGHT)
+		start_y_px = 0;
 	end_y_px = ((double)SCREEN_HEIGHT / (double)2) + (proj_height / (double)2);
+	if (end_y_px > SCREEN_HEIGHT)
+		end_y_px = SCREEN_HEIGHT - 1;
+	// printf("end_y = %f\n", end_y_px);
 	pick_texture_slice(cub, &ray, &slice);
 	slice.scaling = proj_height / slice.texture->height;
+	// printf("scaling = %f\n", slice.scaling);
 	i = -1;
 	while (++i < SCREEN_HEIGHT)
 	{
@@ -438,6 +447,7 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 		while (i < end_y_px && i < SCREEN_HEIGHT - 1)
 		{
 			color = pick_slice_color(&slice, &ray, i, start_y_px);
+			// printf("x = %d, y = %d\n", x, i);
 			img_pix_put(img, x, i, color);
 			i++;
 		}
@@ -477,6 +487,7 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 		ray.proj_height = ray.distance_to_proj_plane / (ray.length
 				* cos(degree_to_rad(ray.relative_angle)));
 		map_rays[i] = get_vector_from_length(ray.length, ray.angle);
+		// printf("ray len = %f proj height = %f\n", ray.length, ray.proj_height);
 		draw_vertical_slice(img, cub, i, ray.proj_height, ray);
 		i--;
 	}
@@ -501,13 +512,6 @@ int	draw_map_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 
 int	check_player_movements(t_cub *cub)
 {
-	// printf("check movement buffer = %d\n", cub->mov.buffer);
-	// printf("fwd = %d\n", cub->mov.fwd);
-	// printf("bwd = %d\n", cub->mov.bwd);
-	// printf("strafe l = %d\n", cub->mov.strafe_l);
-	// printf("strafe r = %d\n", cub->mov.strafe_r);
-	// printf("dir l = %d\n", cub->mov.dir_l);
-	// printf("dir r = %d\n", cub->mov.dir_r);
 	if (cub->mov.fwd)
 		move_character_in_direction(1, cub);
 	if (cub->mov.bwd)
@@ -529,12 +533,12 @@ int	refresh_raycasting(t_cub *cub)
 	t_mlx_img	*img;
 	t_vector	*map_rays;
 
-	img = init_img(&cub->mlx_data);
+	img = init_img(&cub->mlx_data, cub);
 	if (!img)
-		return (error_exit(NULL), -1);
+		return (error_exit(NULL, cub), -1);
 	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
 	if (!map_rays)
-		return (error_exit(NULL), -1);
+		return (error_exit(NULL, cub), -1);
 	shoot_rays(img, cub, map_rays);
 	draw_map(img, cub->map);
 	draw_map_rays(img, cub, map_rays);
@@ -543,7 +547,6 @@ int	refresh_raycasting(t_cub *cub)
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
 	free(map_rays);
 	free(img);
-	// check_player_movements(cub);
 	return (0);
 }
 
@@ -551,13 +554,12 @@ int	start_mlx(int height, int width, t_cub *cub)
 {
 	cub->mlx_data.mlx_ptr = mlx_init();
 	if (!cub->mlx_data.mlx_ptr)
-		return (error_exit(MEM_ERROR), -1);
+		return (error_exit(MEM_ERROR, cub), -1);
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
-	// cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width,
-	// height,
-	// "cub3D ");
+	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
+			"cub3D");
 	if (!cub->mlx_data.win_ptr)
-		return (error_exit(MEM_ERROR), -1);
+		return (error_exit(MEM_ERROR, cub), -1);
 	return (0);
 }

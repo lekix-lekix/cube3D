@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/26 14:19:22 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:48:46 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,10 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 			file_content);
 	if (fd > 0)
 		close(fd);
-	init_cub(cub);
 	get_elems(file_content, cub, *start);
 	skip_elements(&file_content);
-	cub->map = get_map(&file_content);
+	cub->map = get_map(cub, &file_content);
 	current = file_content;
-	while (current)
-	{
-		printf("current = %s\n", current->content);
-		current = current->next;
-	}
 	check_map(cub);
 	free_list(*start);
 }

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:34:53 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/02 18:15:00 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:33:42 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	main(int ac, char **av)
 	t_cub	cub;
 	t_list	*start;
 
+	init_cub(&cub);
 	start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub);
 	parsing(ac, av, &start, &cub);
 	init_mov(&cub);

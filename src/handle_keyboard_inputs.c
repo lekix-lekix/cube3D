@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/02 17:14:13 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:59:49 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ int	move_direction_right(t_cub *cub)
 	return (0);
 }
 
+int	check_wall_collision(t_cub *cub)
+{
+	t_ray	next_pos_ray;
+
+	next_pos_ray.angle = cub->player.angle;
+	next_pos_ray.length = find_ray_length(cub, &next_pos_ray);
+    if (next_pos_ray.length < 0.5)
+	printf("next pos ray = %f\n", next_pos_ray.length);
+	return (0);
+}
+
 int	strafe(int right, t_cub *cub)
 {
 	double	next_pos_x;
@@ -51,8 +62,13 @@ int	strafe(int right, t_cub *cub)
 		angle = cub->player.angle - (double)90;
 		if (angle > 360)
 			angle = fmod(angle, 360);
-		next_pos_x = cub->player.pos.x - cos(degree_to_rad(angle)) * 0.05;
-		next_pos_y = cub->player.pos.y + sin(degree_to_rad(angle)) * 0.05;
+		next_pos_x = cub->player.pos.x - (cos(degree_to_rad(angle)) * 0.05);
+		next_pos_y = cub->player.pos.y + (sin(degree_to_rad(angle)) * 0.05);
+	}
+	if (check_wall_collision(cub))
+	{
+		cub->player.pos.y = next_pos_y;
+		return (-1);
 	}
 	cub->player.pos.x = next_pos_x;
 	cub->player.pos.y = next_pos_y;
@@ -72,7 +88,6 @@ int	move_character_in_direction(int fwd, t_cub *cub)
 {
 	double	next_pos_y;
 	double	next_pos_x;
-	double	modf_var;
 
 	if (fwd)
 	{
@@ -88,9 +103,8 @@ int	move_character_in_direction(int fwd, t_cub *cub)
 		next_pos_y = cub->player.pos.y + sin(degree_to_rad(cub->player.angle))
 			* 0.05;
 	}
-	modf(next_pos_y, &modf_var);
-	if (cub->map[(int)next_pos_y][(int)cub->player.pos.x] == '1')
-		return (0);
+	if (check_wall_collision(cub))
+		return (-1);
 	cub->player.pos.x = next_pos_x;
 	cub->player.pos.y = next_pos_y;
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/11/26 15:25:34 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:45:22 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
 
 	texture = malloc(sizeof(t_texture));
 	if (!texture)
-		return (error_exit(NULL), NULL);
+		return (error_exit(NULL, cub), NULL);
 	texture->text_img = malloc(sizeof(t_mlx_img));
 	if (!texture->text_img)
-		return (error_exit(NULL), NULL);
+		return (error_exit(NULL, cub), NULL);
 	texture->text_img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
 			path, &texture_width, &texture_height);
 	if (!texture->text_img->img_ptr)
-		return (error_exit(NULL), NULL);
+		return (error_exit(NULL, cub), NULL);
 	texture->text_img->img_addr = mlx_get_data_addr(texture->text_img->img_ptr,
 			&texture->text_img->bpp, &texture->text_img->line_len,
 			&texture->text_img->endian);
@@ -36,13 +36,13 @@ t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
 	return (texture);
 }
 
-t_mlx_img	*init_img(t_window_mlx *data)
+t_mlx_img	*init_img(t_window_mlx *data, t_cub *cub)
 {
 	t_mlx_img	*img;
 
 	img = malloc(sizeof(t_mlx_img));
 	if (!img)
-		return (error_exit(NULL), NULL);
+		return (error_exit(NULL, cub), NULL);
 	img->img_ptr = mlx_new_image(data->mlx_ptr, data->width, data->height);
 	if (!img->img_ptr)
 		return (NULL);

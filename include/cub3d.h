@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/02 18:34:43 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:57:19 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ typedef struct s_cub
 }					t_cub;
 
 // Map checking
-char				**get_map(t_list **file);
+char				**get_map(t_cub *cub, t_list **file);
 int					check_map(t_cub *cub);
 int					check_sides_space(char **map, int i, int j);
 int					is_map_char(char c);
@@ -160,7 +160,7 @@ int					ft_is_space(char c);
 
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
-t_mlx_img			*init_img(t_window_mlx *data);
+t_mlx_img			*init_img(t_window_mlx *data, t_cub *cub);
 int					*get_pixel_from_img(t_mlx_img *img, int x, int y);
 void				img_pix_put(t_mlx_img *img, int x, int y, int color);
 int					init_texture(char **tab, t_list *start, t_cub *cub,
@@ -175,6 +175,7 @@ int					refresh_raycasting(t_cub *cub);
 t_vector			rotate_vector(t_vector vec, double angle);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 double				degree_to_rad(double degree);
+double				find_ray_length(t_cub *cub, t_ray *ray);
 
 // Handle keyboard inputs
 int					handle_keyboard_inputs(int key, t_cub *cub);

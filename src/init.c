@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:08:52 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/29 16:51:53 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:38:24 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void	init_cub(t_cub *cub)
 	cub->so_text = NULL;
 	cub->ea_text = NULL;
 	cub->we_text = NULL;
+    cub->mlx_data.mlx_ptr = NULL;
+    cub->mlx_data.win_ptr = NULL;
+    cub->sky = NULL;
 	cub->map = NULL;
 	cub->mov.fwd = false;
 	cub->mov.bwd = false;
