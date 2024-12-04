@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/03 17:57:19 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:11:24 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,8 @@ int					start_raycasting(t_cub *cub);
 int					refresh_raycasting(t_cub *cub);
 t_vector			rotate_vector(t_vector vec, double angle);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
+t_vector			get_vector_from_length(double ray_length,
+						double degree_angle);
 double				degree_to_rad(double degree);
 double				find_ray_length(t_cub *cub, t_ray *ray);
 
