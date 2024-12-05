@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/04 17:38:15 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:30:25 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ double	wrap_angle_360(double angle, double change, bool add)
 		angle_wrap = angle + change;
 		if (angle_wrap > 360)
 			angle_wrap = fmod(angle_wrap, 360);
-	}
+	} 
 	else
 	{
 		angle_wrap = angle - change;
@@ -104,12 +104,12 @@ t_position	find_collision_player_pos(t_ray *next_pos_ray, t_cub *cub)
 
 int	check_wall_collision(t_cub *cub, char dir)
 {
-	t_ray		next_pos_ray;
+	t_ray	next_pos_ray;
 
 	if (dir == 'W')
 		next_pos_ray.angle = cub->player.angle;
 	else if (dir == 'S')
-		next_pos_ray.angle = fmod(cub->player.angle - 180 + 360, 360);
+		next_pos_ray.angle = wrap_angle_360(cub->player.angle, 180, false);
 	else if (dir == 'A')
 		next_pos_ray.angle = wrap_angle_360(cub->player.angle, 90, true);
 	else
@@ -184,8 +184,6 @@ int	move_character_in_direction(int fwd, t_cub *cub)
 		if (check_wall_collision(cub, 'S'))
 			return (1);
 	}
-	// if (check_wall_collision(cub))
-	// 	return (-1);
 	cub->player.pos.x = next_pos_x;
 	cub->player.pos.y = next_pos_y;
 	return (0);

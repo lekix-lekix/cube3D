@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/04 13:36:49 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:20:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ double	wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
 
 int	inc_dx_sum(t_dda_vars *vars, t_ray *ray)
 {
-	if ((*ray).angle > 180 && (*ray).angle <= 359)
+	if ((*ray).angle > 180 && (*ray).angle <= 360)
 		(*vars).y++;
 	else
 		(*vars).y--;
@@ -395,11 +395,7 @@ int	pick_slice_color(t_texture_slice *slice, t_ray *ray, int i, int start_y_px)
 {
 	int	color;
 
-	// double	modf_var_y;
 	(*slice).idx_y = (i - start_y_px) / (*slice).scaling;
-	// printf("slice y = %f round = %f\n", (*slice).idx_y,
-	// round((*slice).idx_y));
-	// if (modf((*slice).idx_y, &modf_var_y) > 0.5 && (*slice).idx_y < 63)
 	(*slice).idx_y = round((*slice).idx_y);
 	if ((*slice).idx_x >= (*slice).texture->width)
 		(*slice).idx_x = (*slice).texture->width - 1;
@@ -407,10 +403,8 @@ int	pick_slice_color(t_texture_slice *slice, t_ray *ray, int i, int start_y_px)
 		(*slice).idx_y = (*slice).texture->height - 1;
 	if ((*slice).idx_y < 0)
 		(*slice).idx_y = 0;
-	// printf("slice x = %f y = %f\n", (*slice).idx_x, (*slice).idx_y);
 	color = *get_pixel_from_img((*slice).texture->text_img, (*slice).idx_x,
 			(*slice).idx_y);
-    // printf("hey there\n");
 	return (create_shaded_color(ray, extract_rgb(color)));
 }
 
@@ -430,12 +424,10 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 	end_y_px = ((double)SCREEN_HEIGHT / (double)2) + (proj_height / (double)2);
 	if (end_y_px > SCREEN_HEIGHT)
 		end_y_px = SCREEN_HEIGHT - 1;
-	// printf("end_y = %f\n", end_y_px);
 	pick_texture_slice(cub, &ray, &slice);
 	slice.scaling = proj_height / slice.texture->height;
-	// printf("scaling = %f\n", slice.scaling);
 	i = -1;
-	while (++i < SCREEN_HEIGHT)
+	while (++i <= SCREEN_HEIGHT)
 	{
 		while (i < start_y_px && i < SCREEN_HEIGHT)
 		{
@@ -444,14 +436,15 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 			// img_pix_put(img, x, i, create_trgb_struct(cub->c_color));
 			i++;
 		}
-		while (i < end_y_px && i < SCREEN_HEIGHT - 1)
+		while (i < end_y_px && i < SCREEN_HEIGHT)
 		{
 			color = pick_slice_color(&slice, &ray, i, start_y_px);
 			// printf("x = %d, y = %d\n", x, i);
 			img_pix_put(img, x, i, color);
 			i++;
 		}
-		img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
+        if (i < SCREEN_HEIGHT - 1)
+		    img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
 	}
 	return (0);
 }
@@ -483,11 +476,13 @@ int	shoot_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 		else if (ray.angle > 360)
 			ray.angle -= (double)360;
 		ray.length = find_ray_length(cub, &ray);
+		// printf("ray length = %f\n", ray.length);
 		ray.relative_angle -= ray.angle_inc;
 		ray.proj_height = ray.distance_to_proj_plane / (ray.length
 				* cos(degree_to_rad(ray.relative_angle)));
 		map_rays[i] = get_vector_from_length(ray.length, ray.angle);
-		// printf("ray len = %f proj height = %f\n", ray.length, ray.proj_height);
+		// printf("ray len = %f proj height = %f\n", ray.length,
+		// ray.proj_height);
 		draw_vertical_slice(img, cub, i, ray.proj_height, ray);
 		i--;
 	}
@@ -547,6 +542,7 @@ int	refresh_raycasting(t_cub *cub)
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
 	free(map_rays);
 	free(img);
+	// check_player_movements(cub);
 	return (0);
 }
 

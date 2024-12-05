@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:34:53 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/03 14:33:42 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:43:39 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	main(int ac, char **av)
 	print_tab(cub.map);
 	mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, &handle_keypress, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 3, 1L << 1, &handle_keyrelease, &cub);
+    // mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, handle_keyboard_inputs, &cub);
 	start_raycasting(&cub);
 	mlx_loop_hook(cub.mlx_data.mlx_ptr, &check_player_movements, &cub);
 	mlx_loop(cub.mlx_data.mlx_ptr);
