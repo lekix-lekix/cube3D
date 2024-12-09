@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/03 12:43:25 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:52:06 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ int	check_map(t_cub *cub)
 		{
 			if (is_border(cub->map, i, j) && cub->map[i][j] != '1')
 				return (exit_map_not_valid(cub, 1), -1);
-			if (!is_allowed_char(cub->map[i][j]))
-				return (exit_map_not_valid(cub, 2), -1);
+			// if (!is_allowed_char(cub->map[i][j]))
+			// 	return (exit_map_not_valid(cub, 2), -1);
 			if (player_found && is_player_direction(cub->map[i][j]))
 				return (exit_map_not_valid(cub, 3), -1);
 			else if (is_player_direction(cub->map[i][j]))

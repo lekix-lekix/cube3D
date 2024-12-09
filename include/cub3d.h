@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/04 12:11:24 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:33:14 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define A 97
 # define S 115
 # define D 100
+# define F 102
 # define UP 65362
 # define LEFT 65361
 # define DOWN 65364
@@ -70,6 +71,7 @@ typedef struct s_movements
 	bool			strafe_r;
 	bool			dir_l;
 	bool			dir_r;
+	bool			open;
 	int				buffer;
 }					t_movements;
 
@@ -140,6 +142,7 @@ typedef struct s_cub
 	t_texture		*so_text;
 	t_texture		*ea_text;
 	t_texture		*we_text;
+	t_texture		*door_text;
 	t_texture		*sky;
 	t_color			c_color;
 	t_color			f_color;
@@ -190,6 +193,7 @@ int					move_direction_left(t_cub *cub);
 int					move_direction_right(t_cub *cub);
 int					move_character_left(t_cub *cub);
 int					move_character_right(t_cub *cub);
+int					open_close_door(t_cub *cub);
 
 // Free functions
 int					quit_cube(t_cub *cub);

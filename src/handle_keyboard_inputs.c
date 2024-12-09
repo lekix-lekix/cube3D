@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/05 17:30:25 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/09 18:41:51 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ double	wrap_angle_360(double angle, double change, bool add)
 		angle_wrap = angle + change;
 		if (angle_wrap > 360)
 			angle_wrap = fmod(angle_wrap, 360);
-	} 
+	}
 	else
 	{
 		angle_wrap = angle - change;
@@ -95,7 +95,7 @@ t_position	find_collision_player_pos(t_ray *next_pos_ray, t_cub *cub)
 	t_vector	new_player_vec;
 	t_position	new_player_pos;
 
-	ray_vec = get_vector_from_length(next_pos_ray->length, cub->player.angle);
+	ray_vec = get_vector_from_length(next_pos_ray->length, next_pos_ray->angle);
 	wall_vec = get_wall_side_collision(next_pos_ray);
 	new_player_vec = calc_updated_player_vec(ray_vec, wall_vec);
 	new_player_pos = get_pos_from_vector(cub->player.pos, new_player_vec);
@@ -130,9 +130,7 @@ int	strafe(int right, t_cub *cub)
 	double	next_pos_y;
 	double	angle;
 
-	angle = cub->player.angle - (double)90;
-	if (angle < 0)
-		angle = fmod(angle, 360);
+	angle = wrap_angle_360(cub->player.angle, 90, false);
 	if (right)
 	{
 		next_pos_x = cub->player.pos.x + (cos(degree_to_rad(angle)) * 0.03);
@@ -186,6 +184,97 @@ int	move_character_in_direction(int fwd, t_cub *cub)
 	}
 	cub->player.pos.x = next_pos_x;
 	cub->player.pos.y = next_pos_y;
+	return (0);
+}
+
+void	check_wall_inc(t_ray *ray, int *x, int *y)
+{
+	double	modf_var_x;
+	double	modf_var_y;
+	double	inter_x;
+	double	inter_y;
+
+	printf("inter x = %f\n", (*ray).intersection_x);
+	inter_x = modf((*ray).intersection_x, &modf_var_x);
+	inter_y = modf((*ray).intersection_y, &modf_var_y);
+	printf("interx = %f inter y = %f\n", inter_x, inter_y);
+	if (!inter_x)
+	{
+		*y = 0;
+		if ((*ray).angle >= 90 && (*ray).angle <= 270)
+			*x = 1;
+		else
+			*x = -1;
+	}
+	else
+	{
+		*x = 0;
+		if ((*ray).angle >= 180 && (*ray).angle <= 360)
+			*y = -1;
+		else
+			*y = 1;
+	}
+}
+
+int	is_oob(char **map, int x, int y)
+{
+	if (x < 0 || y < 0)
+		return (1);
+	if (y >= get_arr_size(map))
+		return (1);
+	if (x > ft_strlen(map[y]))
+		return (1);
+	return (0);
+}
+
+int	check_open_door(t_ray *ray, t_cub *cub, char **door)
+{
+	int	x;
+	int	y;
+	int	x_inc;
+	int	y_inc;
+
+	check_wall_inc(ray, &x_inc, &y_inc);
+	x = ray->intersection_x;
+	y = ray->intersection_y;
+	printf("x_inc = %d y_inc = %d\n", x_inc, y_inc);
+	printf("x start = %d y start = %d\n", x, y);
+	(void)door;
+	while ((x != cub->player.pos.x && y != cub->player.pos.y)
+		|| !is_oob(cub->map, x, y))
+	{
+		printf("check map x = %d y = %d\n", x, y);
+		if (cub->map[y][x] == 'O' && (int)cub->player.pos.x != x
+			&& (int)cub->player.pos.y != y)
+		{
+			printf("player pos x = %f y = %f\n", cub->player.pos.x,
+				cub->player.pos.y);
+			printf("door restored\n");
+			*door = &cub->map[y][x];
+			return (1);
+		}
+		x += x_inc;
+		y += y_inc;
+	}
+	return (-1);
+}
+
+int	open_close_door(t_cub *cub)
+{
+	t_ray	ray;
+	char	*door;
+
+	ray.angle = cub->player.angle;
+	ray.length = find_ray_length(cub, &ray);
+	door = &cub->map[(int)ray.intersection_y][(int)ray.intersection_x];
+	printf("door = %c\n", *door);
+	if (ray.length < 1 && (*door == 'D'))
+	{
+		printf("yes door\n");
+		*door = 'O';
+	}
+	else if (check_open_door(&ray, cub, &door) == 1)
+		*door = 'D';
 	return (0);
 }
 

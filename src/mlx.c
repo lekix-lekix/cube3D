@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/05 17:20:30 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:33:26 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,9 @@ int	start_raycasting(t_cub *cub)
 	cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
 	if (!cub->sky)
 		return (error_exit(NULL, cub), -1);
+	cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
+	if (!cub->door_text)
+		return (error_exit(NULL, cub), -1);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -320,7 +323,8 @@ double	find_ray_length(t_cub *cub, t_ray *ray)
 	dda_vars.y = cub->player.pos.y;
 	while (dda_vars.x >= 0 && dda_vars.y >= 0)
 	{
-		if (cub->map[dda_vars.y][dda_vars.x] == '1')
+		if (cub->map[dda_vars.y][dda_vars.x] == '1'
+			|| cub->map[dda_vars.y][dda_vars.x] == 'D')
 			return (wall_hit(ray, cub->player.pos, dda_vars, last_inc));
 		if (dda_vars.dx_sum > dda_vars.dy_sum)
 			last_inc = inc_dx_sum(&dda_vars, ray);
@@ -361,6 +365,14 @@ void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 	double	modf_var_x;
 	double	modf_var_y;
 
+	if (cub->map[(int)(*ray).intersection_y][(int)(*ray).intersection_x] == 'D')
+	{
+		slice->texture = cub->door_text;
+		(*ray).intersection_x = modf((*ray).intersection_x, &modf_var_x);
+		slice->idx_x = round(ray->intersection_x
+				* (double)slice->texture->width);
+		return ;
+	}
 	(*ray).intersection_x = modf((*ray).intersection_x, &modf_var_x);
 	if (!ray->intersection_x)
 	{
@@ -443,8 +455,8 @@ int	draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x, double proj_height,
 			img_pix_put(img, x, i, color);
 			i++;
 		}
-        if (i < SCREEN_HEIGHT - 1)
-		    img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
+		if (i < SCREEN_HEIGHT - 1)
+			img_pix_put(img, x, i, create_trgb_struct(cub->f_color));
 	}
 	return (0);
 }
@@ -519,6 +531,8 @@ int	check_player_movements(t_cub *cub)
 		move_direction_right(cub);
 	if (cub->mov.dir_l)
 		move_direction_left(cub);
+	if (cub->mov.open)
+		open_close_door(cub);
 	refresh_raycasting(cub);
 	return (0);
 }
