@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/09 14:33:14 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:58:35 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ typedef struct s_movements
 	bool			strafe_r;
 	bool			dir_l;
 	bool			dir_r;
-	bool			open;
 	int				buffer;
 }					t_movements;
 

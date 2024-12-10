@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/09 18:41:51 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:25:58 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,13 @@ int	is_oob(char **map, int x, int y)
 	return (0);
 }
 
+int	is_player_location(t_player *player, int x, int y)
+{
+	if ((int)player->pos.x == x && (int)player->pos.y == y)
+		return (1);
+	return (0);
+}
+
 int	check_open_door(t_ray *ray, t_cub *cub, char **door)
 {
 	int	x;
@@ -239,17 +246,16 @@ int	check_open_door(t_ray *ray, t_cub *cub, char **door)
 	y = ray->intersection_y;
 	printf("x_inc = %d y_inc = %d\n", x_inc, y_inc);
 	printf("x start = %d y start = %d\n", x, y);
+	printf("player pos x = %f y = %f\n", cub->player.pos.x, cub->player.pos.y);
 	(void)door;
-	while ((x != cub->player.pos.x && y != cub->player.pos.y)
-		|| !is_oob(cub->map, x, y))
+	while (!is_oob(cub->map, x, y))
 	{
 		printf("check map x = %d y = %d\n", x, y);
-		if (cub->map[y][x] == 'O' && (int)cub->player.pos.x != x
-			&& (int)cub->player.pos.y != y)
+		printf("player pos x = %f y = %f\n", cub->player.pos.x,
+			cub->player.pos.y);
+		if (cub->map[y][x] == 'O' && !is_player_location(&cub->player, x, y))
 		{
-			printf("player pos x = %f y = %f\n", cub->player.pos.x,
-				cub->player.pos.y);
-			printf("door restored\n");
+			printf("door restored at x %d y %d\n", x, y);
 			*door = &cub->map[y][x];
 			return (1);
 		}
@@ -268,12 +274,13 @@ int	open_close_door(t_cub *cub)
 	ray.length = find_ray_length(cub, &ray);
 	door = &cub->map[(int)ray.intersection_y][(int)ray.intersection_x];
 	printf("door = %c\n", *door);
+	printf("ray.length = %f\n", ray.length);
 	if (ray.length < 1 && (*door == 'D'))
 	{
 		printf("yes door\n");
 		*door = 'O';
 	}
-	else if (check_open_door(&ray, cub, &door) == 1)
+	else if (ray.length > 0.5 && check_open_door(&ray, cub, &door) == 1)
 		*door = 'D';
 	return (0);
 }

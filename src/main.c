@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:34:53 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/09 13:59:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:58:40 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_keypress(int key, t_cub *cub)
 	else if (cub->mov.buffer == D)
 		cub->mov.strafe_r = true;
     else if (cub->mov.buffer == F)
-        cub->mov.open = true;
+        open_close_door(cub);
 	else if (cub->mov.buffer == LEFT)
 		cub->mov.dir_l = true;
 	else if (cub->mov.buffer == RIGHT)
@@ -44,7 +44,6 @@ void	init_mov(t_cub *cub)
 	cub->mov.strafe_r = 0;
 	cub->mov.dir_l = 0;
 	cub->mov.dir_r = 0;
-    cub->mov.open = 0;
 }
 
 int	handle_keyrelease(int key, t_cub *cub)
@@ -59,8 +58,6 @@ int	handle_keyrelease(int key, t_cub *cub)
 		cub->mov.strafe_l = 0;
 	else if (key == D)
 		cub->mov.strafe_r = 0;
-    else if (key == F)
-        cub->mov.open = 0;
 	else if (key == LEFT)
 		cub->mov.dir_l = 0;
 	else if (key == RIGHT)

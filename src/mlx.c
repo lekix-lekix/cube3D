@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/09 14:33:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:59:26 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,8 +531,6 @@ int	check_player_movements(t_cub *cub)
 		move_direction_right(cub);
 	if (cub->mov.dir_l)
 		move_direction_left(cub);
-	if (cub->mov.open)
-		open_close_door(cub);
 	refresh_raycasting(cub);
 	return (0);
 }
