@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:33:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/10 13:59:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:24:44 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +183,7 @@ int	draw_ray(t_mlx_img *img, t_position start, t_position end, int arr_size)
 	start.y = round(start.y);
 	end.x = round(end.x);
 	end.y = round(end.y);
-	drawLine((int)start.x, (int)start.y, (int)end.x, (int)end.y, create_trgb(0,
-			0, 255, 0), img);
+	drawLine(start, end, create_trgb(0, 0, 255, 0), img);
 	return (0);
 }
 
@@ -245,95 +244,6 @@ void	init_dx_dy(t_dda_vars *vars, double angle)
 		(*vars).dx = fabs(1 / fabs(cos(degree_to_rad(angle))));
 }
 
-void	init_dx_dy_sums(t_dda_vars *vars, t_position player_pos, double angle)
-{
-	double	modf_var;
-	double	modf_real;
-
-	modf_real = modf(player_pos.x, &modf_var);
-	if (modf_real)
-	{
-		if (angle < 90 || angle > 270)
-			(*vars).dx_sum = fabs((1 - modf_real) * (*vars).dx);
-		else
-			(*vars).dx_sum = fabs(modf_real * (*vars).dx);
-	}
-	else
-		(*vars).dx_sum = fabs((*vars).dx);
-	if (modf(player_pos.y, &modf_var))
-	{
-		modf_real = modf(player_pos.y, &modf_var);
-		if (angle > 180)
-			(*vars).dy_sum = fabs((1 - modf_real) * (*vars).dy);
-		else
-			(*vars).dy_sum = fabs(modf_real * (*vars).dy);
-	}
-	else
-		(*vars).dy_sum = fabs((*vars).dy);
-}
-
-double	wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
-		int last_inc)
-{
-	if (last_inc == 0)
-	{
-		(*ray).intersection_x = player_pos.x + cos(degree_to_rad((*ray).angle))
-			* (vars.dy_sum - vars.dy);
-		(*ray).intersection_y = vars.y;
-		return (fabs(vars.dy_sum - vars.dy));
-	}
-	else
-	{
-		(*ray).intersection_x = vars.x;
-		(*ray).intersection_y = player_pos.y - (sin(degree_to_rad((*ray).angle))
-				* (vars.dx_sum - vars.dx));
-		return (fabs(vars.dx_sum - vars.dx));
-	}
-}
-
-int	inc_dx_sum(t_dda_vars *vars, t_ray *ray)
-{
-	if ((*ray).angle > 180 && (*ray).angle <= 360)
-		(*vars).y++;
-	else
-		(*vars).y--;
-	(*vars).dy_sum += (*vars).dy;
-	return (0);
-}
-
-int	inc_dy_sum(t_dda_vars *vars, t_ray *ray)
-{
-	if ((*ray).angle > 90 && (*ray).angle <= 270)
-		(*vars).x--;
-	else
-		(*vars).x++;
-	(*vars).dx_sum += (*vars).dx;
-	return (1);
-}
-
-double	find_ray_length(t_cub *cub, t_ray *ray)
-{
-	t_dda_vars	dda_vars;
-	int			last_inc;
-
-	init_dx_dy(&dda_vars, (*ray).angle);
-	init_dx_dy_sums(&dda_vars, cub->player.pos, (*ray).angle);
-	last_inc = -1;
-	dda_vars.x = cub->player.pos.x;
-	dda_vars.y = cub->player.pos.y;
-	while (dda_vars.x >= 0 && dda_vars.y >= 0)
-	{
-		if (cub->map[dda_vars.y][dda_vars.x] == '1'
-			|| cub->map[dda_vars.y][dda_vars.x] == 'D')
-			return (wall_hit(ray, cub->player.pos, dda_vars, last_inc));
-		if (dda_vars.dx_sum > dda_vars.dy_sum)
-			last_inc = inc_dx_sum(&dda_vars, ray);
-		else
-			last_inc = inc_dy_sum(&dda_vars, ray);
-	}
-	return (-1);
-}
-
 t_vector	get_vector_from_length(double ray_length, double degree_angle)
 {
 	t_vector	ray;
@@ -369,6 +279,8 @@ void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 	{
 		slice->texture = cub->door_text;
 		(*ray).intersection_x = modf((*ray).intersection_x, &modf_var_x);
+		if (!(*ray).intersection_x)
+			(*ray).intersection_x = modf((*ray).intersection_y, &modf_var_y);
 		slice->idx_x = round(ray->intersection_x
 				* (double)slice->texture->width);
 		return ;

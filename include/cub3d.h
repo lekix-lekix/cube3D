@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/10 13:58:35 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:58:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,21 +168,27 @@ void				img_pix_put(t_mlx_img *img, int x, int y, int color);
 int					init_texture(char **tab, t_list *start, t_cub *cub,
 						t_texture **cub_text);
 t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
-void				drawLine(int x0, int y0, int x1, int y1, int c,
+int					drawLine(t_position start, t_position end, int color,
 						t_mlx_img *img);
 
 // Raycasting
 int					start_raycasting(t_cub *cub);
 int					refresh_raycasting(t_cub *cub);
-t_vector			rotate_vector(t_vector vec, double angle);
-t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
-t_vector			get_vector_from_length(double ray_length,
-						double degree_angle);
-double				degree_to_rad(double degree);
 double				find_ray_length(t_cub *cub, t_ray *ray);
+int					check_wall_collision(t_cub *cub, char dir);
+double				find_ray_length(t_cub *cub, t_ray *ray);
+void				init_dx_dy(t_dda_vars *vars, double angle);
 
 // Handle keyboard inputs
 int					handle_keyboard_inputs(int key, t_cub *cub);
+
+// Maths
+double				degree_to_rad(double degree);
+t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
+double				wrap_angle_360(double angle, double change, bool add);
+t_vector			rotate_vector(t_vector vec, double angle);
+t_vector			get_vector_from_length(double ray_length,
+						double degree_angle);
 
 // Movement inputs
 int					check_player_movements(t_cub *cub);

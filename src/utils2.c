@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:58:06 by inbennou          #+#    #+#             */
-/*   Updated: 2024/10/17 17:58:51 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:58:31 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,3 +59,21 @@ int	pos_atoi(char *str)
 	return (result);
 }
 
+double	wrap_angle_360(double angle, double change, bool add)
+{
+	double	angle_wrap;
+
+	if (add)
+	{
+		angle_wrap = angle + change;
+		if (angle_wrap > 360)
+			angle_wrap = fmod(angle_wrap, 360);
+	}
+	else
+	{
+		angle_wrap = angle - change;
+		if (angle_wrap < 0)
+			angle_wrap += 360;
+	}
+	return (angle_wrap);
+}

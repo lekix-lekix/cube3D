@@ -16,7 +16,9 @@ SRC = src/parsing.c src/errors.c src/utils.c src/utils2.c src/init.c \
 	src/movement_inputs.c \
 	src/map_utils.c \
 	src/minimap.c \
-	src/bresenham.c
+	src/bresenham.c \
+	src/wall_collisions.c \
+	src/raycasting.c
 
 OBJS_BASE = $(SRC:.c=.o)
 # OBJS_BASE_BONUS = $(SRC_BONUS:.c=.o)
