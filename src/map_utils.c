@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/02 18:24:18 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:31:12 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	error_exit(char *str, t_cub *cub)
 	printf("Error\n");
 	if (str)
 		printf("%s\n", str);
-    quit_cube(cub);
+	quit_cube(cub);
 	return (-1);
 }
 
@@ -51,4 +51,26 @@ void	free_arr_until_idx(char **arr, int idx)
 	i = -1;
 	while (arr[++i] && i < idx)
 		free(arr[i]);
+}
+
+void	find_player_init_pos(t_cub *cub)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (cub->map[++i])
+	{
+		j = -1;
+		while (cub->map[i][++j])
+		{
+			if (is_player_direction(cub->map[i][j]))
+			{
+				cub->player.pos.x = j + 0.5;
+				cub->player.pos.y = i + 0.5;
+				cub->player.initial_dir = cub->map[i][j];
+				return ;
+			}
+		}
+	}
 }

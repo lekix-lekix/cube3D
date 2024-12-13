@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/11 18:58:30 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:35:23 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# define SCREEN_WIDTH 1600
+# define SCREEN_HEIGHT 800
 # define W 119
 # define A 97
 # define S 115
 # define D 100
 # define F 102
+# define P 112
 # define UP 65362
 # define LEFT 65361
 # define DOWN 65364
 # define RIGHT 65363
 # define ESCAPE 65307
-# define ONE_UNIT 16
 # define FOV 60
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
-# define SCREEN_WIDTH 1600
-# define SCREEN_HEIGHT 800
 # define MEM_ERROR "Memory allocation failed"
 
 typedef struct s_window_mlx
@@ -143,6 +143,8 @@ typedef struct s_cub
 	t_texture		*we_text;
 	t_texture		*door_text;
 	t_texture		*sky;
+    int             map_unit;
+	bool			sky_bool;
 	t_color			c_color;
 	t_color			f_color;
 	char			**map;
@@ -160,6 +162,19 @@ int					is_player_direction(char c);
 int					is_allowed_char(char c);
 int					ft_is_space(char c);
 
+// Map
+int					draw_map(t_mlx_img *img, t_cub *cub);
+void				find_player_init_pos(t_cub *cub);
+int					draw_map_rays(t_mlx_img *img, t_cub *cub,
+						t_vector *map_rays);
+int					draw_line(t_position start, t_position end, int color,
+						t_mlx_img *img);
+
+// Map utils
+void				free_arr_until_idx(char **arr, int idx);
+int					get_arr_size(char **arr);
+void				skip_elements(t_list **file_content);
+
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
 t_mlx_img			*init_img(t_window_mlx *data, t_cub *cub);
@@ -168,8 +183,18 @@ void				img_pix_put(t_mlx_img *img, int x, int y, int color);
 int					init_texture(char **tab, t_list *start, t_cub *cub,
 						t_texture **cub_text);
 t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
-int					drawLine(t_position start, t_position end, int color,
-						t_mlx_img *img);
+
+// Colors rendering
+int					create_trgb(int t, int r, int g, int b);
+t_color				extract_rgb(int color_int);
+int					create_trgb_struct(t_color color);
+int					create_shaded_color(t_ray *ray, t_color color);
+
+// Texturing
+void				pick_texture_slice(t_cub *cub, t_ray *ray,
+						t_texture_slice *slice);
+int					pick_slice_color(t_texture_slice *slice, t_ray *ray, int i,
+						int start_y_px);
 
 // Raycasting
 int					start_raycasting(t_cub *cub);
@@ -178,17 +203,26 @@ double				find_ray_length(t_cub *cub, t_ray *ray);
 int					check_wall_collision(t_cub *cub, char dir);
 double				find_ray_length(t_cub *cub, t_ray *ray);
 void				init_dx_dy(t_dda_vars *vars, double angle);
+double				wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
+						int last_hit);
+
+// Rendering
+int					draw_vertical_slice(t_mlx_img *img, t_cub *cub, int x,
+						t_ray *ray);
 
 // Handle keyboard inputs
-int					handle_keyboard_inputs(int key, t_cub *cub);
+int					handle_keypress(int key, t_cub *cub);
+int					handle_keyrelease(int key, t_cub *cub);
 
-// Maths
+// Maths & vectors
 double				degree_to_rad(double degree);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 double				wrap_angle_360(double angle, double change, bool add);
 t_vector			rotate_vector(t_vector vec, double angle);
 t_vector			get_vector_from_length(double ray_length,
 						double degree_angle);
+t_position			coordinates_to_px(t_cub *cub, double x, double y);
+t_vector			find_dir(t_cub *cub);
 
 // Movement inputs
 int					check_player_movements(t_cub *cub);
@@ -196,22 +230,14 @@ int					move_character_in_direction(int key, t_cub *cub);
 int					strafe(int right, t_cub *cub);
 int					move_direction_left(t_cub *cub);
 int					move_direction_right(t_cub *cub);
-int					move_character_left(t_cub *cub);
-int					move_character_right(t_cub *cub);
 int					open_close_door(t_cub *cub);
 
 // Free functions
 int					quit_cube(t_cub *cub);
 int					error_exit(char *str, t_cub *cub);
 void				exit_map_not_valid(t_cub *cub, int err);
-
-// Map
-int					draw_map(t_mlx_img *img, char **map);
-
-// Map utils
-void				free_arr_until_idx(char **arr, int idx);
-int					get_arr_size(char **arr);
-void				skip_elements(t_list **file_content);
+void				destroy_free_texture(t_cub *cub, t_texture *texture);
+int					quit_cube(t_cub *cub);
 
 // parsing
 void				name_check(char *str);
@@ -222,14 +248,13 @@ void				parsing(int ac, char **av, t_list **start, t_cub *cub);
 
 // init
 void				init_cub(t_cub *cub);
+void				init_mov(t_cub *cub);
 
 // add text
 void				add_texture(char **split_elem, t_list *file_content,
 						t_list *start, t_cub *cub);
 
 // get color
-int					get_int(char **split_elem, t_list *start, t_cub *cub,
-						char *color);
 void				get_color(char **split_elem, t_list *start, t_cub *cub,
 						char id);
 

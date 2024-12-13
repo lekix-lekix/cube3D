@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:30:14 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/03 14:47:09 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:30:42 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,5 @@ void	texture_error(char **tab, t_list *start, t_cub *cub, char *msg)
 void	color_error(char **tab, t_list *start, t_cub *cub, char *color)
 {
 	ft_free(color);
-	texture_error(tab, start, cub,
-		"Format error. exemple: C 225,30,0");
+	texture_error(tab, start, cub, "Format error. exemple: C 225,30,0");
 }

@@ -5,38 +5,48 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 18:23:07 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/11 18:56:54 by kipouliq         ###   ########.fr       */
+/*   Created: 2024/12/12 12:32:51 by kipouliq          #+#    #+#             */
+/*   Updated: 2024/12/13 12:41:01 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	init_dx_dy_sums(t_dda_vars *vars, t_position player_pos, double angle)
+t_ray	init_ray(double player_angle)
 {
-	double	modf_var;
-	double	modf_real;
+	t_ray	ray;
 
-	modf_real = modf(player_pos.x, &modf_var);
-	if (modf_real)
+	ray.angle_inc = (double)FOV / (double)SCREEN_WIDTH;
+	ray.angle = player_angle - (double)(FOV / 2);
+	ray.distance_to_proj_plane = (SCREEN_WIDTH / 5) / tan(degree_to_rad(FOV
+				/ 2));
+	ray.relative_angle = (double)FOV / (double)2;
+	return (ray);
+}
+
+int	shoot_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
+{
+	t_ray	ray;
+	int		i;
+
+	i = SCREEN_WIDTH;
+	ray = init_ray(cub->player.angle);
+	while (i >= 0)
 	{
-		if (angle < 90 || angle > 270)
-			(*vars).dx_sum = fabs((1 - modf_real) * (*vars).dx);
-		else
-			(*vars).dx_sum = fabs(modf_real * (*vars).dx);
+		ray.angle += ray.angle_inc;
+		if (ray.angle < 0)
+			ray.angle += (double)360;
+		else if (ray.angle > 360)
+			ray.angle -= (double)360;
+		ray.length = find_ray_length(cub, &ray);
+		ray.relative_angle -= ray.angle_inc;
+		ray.proj_height = ray.distance_to_proj_plane / (ray.length
+				* cos(degree_to_rad(ray.relative_angle)));
+		map_rays[i] = get_vector_from_length(ray.length, ray.angle);
+		draw_vertical_slice(img, cub, i, &ray);
+		i--;
 	}
-	else
-		(*vars).dx_sum = fabs((*vars).dx);
-	if (modf(player_pos.y, &modf_var))
-	{
-		modf_real = modf(player_pos.y, &modf_var);
-		if (angle > 180)
-			(*vars).dy_sum = fabs((1 - modf_real) * (*vars).dy);
-		else
-			(*vars).dy_sum = fabs(modf_real * (*vars).dy);
-	}
-	else
-		(*vars).dy_sum = fabs((*vars).dy);
+	return (0);
 }
 
 double	wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
@@ -58,45 +68,46 @@ double	wall_hit(t_ray *ray, t_position player_pos, t_dda_vars vars,
 	}
 }
 
-int	inc_dx_sum(t_dda_vars *vars, t_ray *ray)
+int	refresh_raycasting(t_cub *cub)
 {
-	if ((*ray).angle > 180 && (*ray).angle <= 360)
-		(*vars).y++;
-	else
-		(*vars).y--;
-	(*vars).dy_sum += (*vars).dy;
+	t_mlx_img	*img;
+	t_vector	*map_rays;
+
+	img = init_img(&cub->mlx_data, cub);
+	if (!img)
+		return (error_exit(NULL, cub), -1);
+	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
+	if (!map_rays)
+		return (error_exit(NULL, cub), -1);
+	shoot_rays(img, cub, map_rays);
+	draw_map(img, cub);
+	draw_map_rays(img, cub, map_rays);
+	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
+		img->img_ptr, 0, 0);
+	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
+	free(map_rays);
+	free(img);
 	return (0);
 }
 
-int	inc_dy_sum(t_dda_vars *vars, t_ray *ray)
+int	start_raycasting(t_cub *cub)
 {
-	if ((*ray).angle > 90 && (*ray).angle <= 270)
-		(*vars).x--;
+	find_player_init_pos(cub);
+	cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
+	if (!cub->sky)
+		return (error_exit(NULL, cub), -1);
+	cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
+	if (!cub->door_text)
+		return (error_exit(NULL, cub), -1);
+	cub->player.dir = find_dir(cub);
+	if (cub->player.initial_dir == 'N')
+		cub->player.angle = 90;
+	else if (cub->player.initial_dir == 'E')
+		cub->player.angle = 360;
+	else if (cub->player.initial_dir == 'S')
+		cub->player.angle = 270;
 	else
-		(*vars).x++;
-	(*vars).dx_sum += (*vars).dx;
-	return (1);
-}
-
-double	find_ray_length(t_cub *cub, t_ray *ray)
-{
-	t_dda_vars dda_vars;
-	int last_inc;
-
-	init_dx_dy(&dda_vars, (*ray).angle);
-	init_dx_dy_sums(&dda_vars, cub->player.pos, (*ray).angle);
-	last_inc = -1;
-	dda_vars.x = cub->player.pos.x;
-	dda_vars.y = cub->player.pos.y;
-	while (dda_vars.x >= 0 && dda_vars.y >= 0)
-	{
-		if (cub->map[dda_vars.y][dda_vars.x] == '1'
-			|| cub->map[dda_vars.y][dda_vars.x] == 'D')
-			return (wall_hit(ray, cub->player.pos, dda_vars, last_inc));
-		if (dda_vars.dx_sum > dda_vars.dy_sum)
-			last_inc = inc_dx_sum(&dda_vars, ray);
-		else
-			last_inc = inc_dy_sum(&dda_vars, ray);
-	}
-	return (-1);
+		cub->player.angle = 180;
+	refresh_raycasting(cub);
+	return (0);
 }

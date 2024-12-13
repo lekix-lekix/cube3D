@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_characters.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: inbennou <inbennou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:19:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/10/14 18:09:18 by inbennou         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:28:47 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_is_space(char c)
 int	is_allowed_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == '1' || c == '0'
-		|| c == ' ');
+		|| c == ' ' || c == 'D');
 }
 
 int	is_player_direction(char c)

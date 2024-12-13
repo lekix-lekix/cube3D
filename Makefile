@@ -10,15 +10,23 @@ NAME = cub3d
 SRC = src/parsing.c src/errors.c src/utils.c src/utils2.c src/init.c \
 	src/add_text.c src/main.c src/get_color.c src/test_characters.c \
 	src/map_checking.c \
-	src/mlx.c \
+	src/map_drawing_bis.c \
+	src/maths_vectors_bis.c \
 	src/mlx_utils.c \
 	src/handle_keyboard_inputs.c \
-	src/movement_inputs.c \
+	src/movement.c \
 	src/map_utils.c \
-	src/minimap.c \
+	src/map_drawing.c \
 	src/bresenham.c \
 	src/wall_collisions.c \
-	src/raycasting.c
+	src/raycasting.c \
+	src/raycasting_bis.c \
+	src/rendering.c \
+	src/colors_rendering.c \
+	src/maths_vectors.c \
+	src/textures.c \
+	src/doors.c \
+	src/exit_free.c
 
 OBJS_BASE = $(SRC:.c=.o)
 # OBJS_BASE_BONUS = $(SRC_BONUS:.c=.o)

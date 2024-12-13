@@ -6,11 +6,25 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/03 12:45:22 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:40:06 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+int	start_mlx(int height, int width, t_cub *cub)
+{
+	cub->mlx_data.mlx_ptr = mlx_init();
+	if (!cub->mlx_data.mlx_ptr)
+		return (error_exit(MEM_ERROR, cub), -1);
+	cub->mlx_data.width = width;
+	cub->mlx_data.height = height;
+	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
+			"cub3D");
+	if (!cub->mlx_data.win_ptr)
+		return (error_exit(MEM_ERROR, cub), -1);
+	return (0);
+}
 
 t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
 {
@@ -31,8 +45,8 @@ t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
 	texture->text_img->img_addr = mlx_get_data_addr(texture->text_img->img_ptr,
 			&texture->text_img->bpp, &texture->text_img->line_len,
 			&texture->text_img->endian);
-    texture->width = texture_width;
-    texture->height = texture_height;
+	texture->width = texture_width;
+	texture->height = texture_height;
 	return (texture);
 }
 

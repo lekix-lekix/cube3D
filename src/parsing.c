@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/03 14:48:46 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:37:01 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	parsing(int ac, char **av, t_list **start, t_cub *cub)
 		map_error(-1, "This program takes one argument (the map).", NULL);
 	name_check(av[1]);
 	fd = open(av[1], O_RDONLY);
-	if (fd < 0) // perror ?
+	if (fd < 0)
 		map_error(-1, "Can't open file.", NULL);
 	file_content = get_file(fd);
 	*start = file_content;
@@ -89,10 +89,6 @@ void	elems_check(char **split_elem, t_list *start, t_cub *cub)
 		texture_error(split_elem, start, cub, "SO texture missing.");
 	if (!cub->we_text)
 		texture_error(split_elem, start, cub, "WE texture missing.");
-	// if (cub->c_color < 0)
-	// 	texture_error(split_elem, start, cub, "C color missing.");
-	// if (cub->f_color < 0)
-	// 	texture_error(split_elem, start, cub, "F color missing.");
 }
 
 bool	get_elems(t_list *file_content, t_cub *cub, t_list *start)

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:22:17 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/02 18:35:21 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:30:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	init_texture(char **tab, t_list *start, t_cub *cub, t_texture **cub_text)
 		if (!path)
 			return (error_exit(MEM_ERROR, cub), -1);
 		*cub_text = init_mlx_img_texture(cub, path);
-        free(path);
+		free(path);
 	}
 	else
 		texture_error(tab, start, cub,
