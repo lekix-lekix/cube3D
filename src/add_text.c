@@ -52,3 +52,27 @@ int	init_texture(char **tab, t_list *start, t_cub *cub, t_texture **cub_text)
 			"Each ID can only have one texture path.");
 	return (0);
 }
+
+int	get_elems(t_list *file_content, t_cub *cub, t_list *start)
+{
+	char	**split_elem;
+	int		x;
+
+	x = 0;
+	split_elem = NULL;
+	while (file_content && x < 6)
+	{
+		if (is_empty(file_content->content))
+			file_content = file_content->next;
+		else
+		{
+			if (is_elem(file_content->content))
+				add_texture(split_elem, file_content, start, cub);
+			else
+				return (ft_free_and_return(split_elem, start, cub), 0);
+			x++;
+			file_content = file_content->next;
+		}
+	}
+	return (1);
+}

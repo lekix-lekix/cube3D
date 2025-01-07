@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/13 15:35:23 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:59:39 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,11 +240,12 @@ void				destroy_free_texture(t_cub *cub, t_texture *texture);
 int					quit_cube(t_cub *cub);
 
 // parsing
-void				name_check(char *str);
+int				name_check(char *str);
 t_list				*get_file(int fd);
-void				elems_check(char **split_elem, t_list *start, t_cub *cub);
-bool				get_elems(t_list *file_content, t_cub *cub, t_list *start);
-void				parsing(int ac, char **av, t_list **start, t_cub *cub);
+int				elems_check(char **split_elem, t_list *start, t_cub *cub);
+int				get_elems(t_list *file_content, t_cub *cub, t_list *start);
+int				parsing(int ac, char **av, t_list **start, t_cub *cub);
+int				get_elems(t_list *file_content, t_cub *cub, t_list *start);
 
 // init
 void				init_cub(t_cub *cub);
@@ -263,7 +264,7 @@ bool				is_space(char c);
 void				free_line(char *line);
 void				free_cub(t_cub *cub);
 bool				is_empty(char *str);
-bool				is_elem(char *str);
+int				is_elem(char *str);
 
 // utils2
 bool				is_number(char c);
@@ -281,5 +282,6 @@ void				color_error(char **tab, t_list *start, t_cub *cub,
 
 // ft_split
 char				**ft_split(const char *s, char c);
+void	tab_free(char **tab);
 
 #endif

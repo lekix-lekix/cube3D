@@ -3,52 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:13:50 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/13 12:37:01 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/15 21:21:18 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	parsing(int ac, char **av, t_list **start, t_cub *cub)
+int	parsing(int ac, char **av, t_list **start, t_cub *cub)
 {
 	int		fd;
 	t_list	*file_content;
 	t_list	*current;
 
 	if (ac != 2)
-		map_error(-1, "This program takes one argument (the map).", NULL);
-	name_check(av[1]);
+		return (map_error(-1, "This program takes one argument (the map).",
+				NULL), 1);
+	if (name_check(av[1]))
+		return (1);
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		map_error(-1, "Can't open file.", NULL);
+		return (map_error(-1, "Can't open file.", NULL), 1);
 	file_content = get_file(fd);
 	*start = file_content;
 	if (!file_content || ft_lstsize(file_content) < 8)
-		map_error(fd, "You should have 6 elements and 1 map in your file.",
-			file_content);
+		return (map_error(fd,
+				"You should have 6 elements and 1 map in your file.",
+				file_content), 1);
 	if (fd > 0)
 		close(fd);
-	get_elems(file_content, cub, *start);
+	if (!get_elems(file_content, cub, *start))
+		return (1);
 	skip_elements(&file_content);
 	cub->map = get_map(cub, &file_content);
-	current = file_content;
-	check_map(cub);
-	free_list(*start);
+	return (current = file_content, check_map(cub), free_list(*start), 0);
 }
 
-void	name_check(char *str)
+int	name_check(char *str)
 {
 	int	i;
 
 	if (!str || !str[0])
-		map_error(-1, "Invalid name. Must have .cub extension.", NULL);
+		return (map_error(-1, "Invalid name. The map must have .cub extension.",
+				NULL), 1);
 	i = ft_strlen(str) - 1;
 	if (str[i] != 'b' || str[i - 1] != 'u' || str[i - 2] != 'c' || str[i
-		- 3] != '.')
-		map_error(-1, "Invalid name. Must have .cub extension.", NULL);
+			- 3] != '.')
+		return (map_error(-1, "Invalid name. The map must have .cub extension.",
+				NULL), 1);
+	return (0);
 }
 
 t_list	*get_file(int fd)
@@ -79,37 +84,46 @@ t_list	*get_file(int fd)
 	return (start);
 }
 
-void	elems_check(char **split_elem, t_list *start, t_cub *cub)
+void	ft_another_function(t_cub *cub)
 {
-	if (!cub->ea_text)
-		texture_error(split_elem, start, cub, "EA texture missing.");
-	if (!cub->no_text)
-		texture_error(split_elem, start, cub, "NO texture missing.");
-	if (!cub->so_text)
-		texture_error(split_elem, start, cub, "SO texture missing.");
-	if (!cub->we_text)
-		texture_error(split_elem, start, cub, "WE texture missing.");
+	if (cub->ea_text)
+	{
+		if (cub->ea_text->text_img && cub->ea_text->text_img->img_ptr)
+			mlx_destroy_image(cub->mlx_data.mlx_ptr,
+				cub->ea_text->text_img->img_ptr);
+		(free(cub->ea_text->text_img), free(cub->ea_text));
+	}
+	if (cub->we_text)
+	{
+		if (cub->we_text->text_img && cub->we_text->text_img->img_ptr)
+			mlx_destroy_image(cub->mlx_data.mlx_ptr,
+				cub->we_text->text_img->img_ptr);
+		(free(cub->we_text->text_img), free(cub->we_text));
+	}
 }
 
-bool	get_elems(t_list *file_content, t_cub *cub, t_list *start)
+void	ft_free_and_return(char **split_elem, t_list *start, t_cub *cub)
 {
-	int		i;
-	char	**split_elem;
-
-	i = 0;
-	split_elem = NULL;
-	while (file_content && i < 6)
+	if (split_elem)
+		free_tab(split_elem);
+	(void)start;
+	if (start)
+		free_list(start);
+	dprintf(2, "Error\n");
+	dprintf(2, "Can't open the file or one of the elems is not right.\n");
+	ft_another_function(cub);
+	if (cub->no_text)
 	{
-		if (is_empty(file_content->content))
-			file_content = file_content->next;
-		else
-		{
-			if (is_elem(file_content->content))
-				add_texture(split_elem, file_content, start, cub);
-			i++;
-			file_content = file_content->next;
-		}
+		if (cub->no_text->text_img && cub->no_text->text_img->img_ptr)
+			mlx_destroy_image(cub->mlx_data.mlx_ptr,
+				cub->no_text->text_img->img_ptr);
+		(free(cub->no_text->text_img), free(cub->no_text));
 	}
-	elems_check(split_elem, start, cub);
-	return (true);
+	if (cub->so_text)
+	{
+		if (cub->so_text->text_img && cub->so_text->text_img->img_ptr)
+			mlx_destroy_image(cub->mlx_data.mlx_ptr,
+				cub->so_text->text_img->img_ptr);
+		(free(cub->so_text->text_img), free(cub->so_text));
+	}
 }

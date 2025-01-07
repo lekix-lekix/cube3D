@@ -41,8 +41,8 @@ void	free_textures(t_cub *cub)
 		destroy_free_texture(cub, cub->we_text);
 	if (cub->sky)
 		destroy_free_texture(cub, cub->sky);
-    if (cub->door_text)
-        destroy_free_texture(cub, cub->door_text);
+	if (cub->door_text)
+		destroy_free_texture(cub, cub->door_text);
 }
 
 int	quit_cube(t_cub *cub)

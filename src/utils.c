@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:29:44 by inbennou          #+#    #+#             */
-/*   Updated: 2024/11/26 12:40:01 by kipouliq         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:56:03 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,60 @@ bool	is_empty(char *str)
 	i = 0;
 	while (is_space(str[i]) || str[i] == '\n')
 		i++;
-	if (i == ft_strlen(str))
+	if (i == ft_strlen(str)) // If the line aka the str is empty, we return true.
 		return (true);
 	return (false);
 }
 
-bool	is_elem(char *str)
+char	*ft_remove_newline(char *sr)
+{
+    int	p;
+    int	q;
+    char *res;
+
+    p = 0;
+    q = 0;
+    res = (char *)malloc(sizeof(char) * (ft_strlen(sr) + 1));
+    if (!res)
+        return (NULL);
+    while (sr[p])
+    {	
+        if (sr[p] != '\n')
+            res[q++] = sr[p];
+        p++;
+    }
+    res[q] = '\0';
+    return (res);
+}
+
+int	check_file(char *sr)
+{
+	int	fd;
+	char	**fpath;
+	char	*path_wnl;
+
+	fpath = ft_split(sr, 32);
+	path_wnl = ft_remove_newline(fpath[1]);
+	fd = open(path_wnl, O_RDWR);
+	free(path_wnl);
+	tab_free(fpath);
+	if (fd >= 0)
+		return (close(fd), 1);
+	else
+		return (close(fd), 0);
+}
+
+int	is_elem(char *str)
 {
 	if (!str)
 		return (false);
-	if (ft_strncmp(str, "NO", 2) == 0)
+	if ((ft_strncmp(str, "NO", 2) == 0) && (check_file(str)))
 		return (true);
-	if (ft_strncmp(str, "SO", 2) == 0)
+	if ((ft_strncmp(str, "SO", 2) == 0) && (check_file(str)))
 		return (true);
-	if (ft_strncmp(str, "EA", 2) == 0)
+	if ((ft_strncmp(str, "EA", 2) == 0) && (check_file(str)))
 		return (true);
-	if (ft_strncmp(str, "WE", 2) == 0)
+	if ((ft_strncmp(str, "WE", 2) == 0) && (check_file(str)))
 		return (true);
 	if (str[0] == 'F')
 		return (true);
