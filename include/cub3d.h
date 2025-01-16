@@ -5,16 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 17:14:10 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/15 19:59:39 by sabakar-         ###   ########.fr       */
+/*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
+/*   Updated: 2025/01/16 13:13:30 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../libft/get_next_line.h"
-# include "../libft/libft.h"
+# include "../42-MEGALIBFT/megalibft.h"
 # include "../mlx/mlx.h"
 # include <math.h>
 # include <stdbool.h>
@@ -143,7 +142,7 @@ typedef struct s_cub
 	t_texture		*we_text;
 	t_texture		*door_text;
 	t_texture		*sky;
-    int             map_unit;
+	int				map_unit;
 	bool			sky_bool;
 	t_color			c_color;
 	t_color			f_color;
@@ -154,7 +153,7 @@ typedef struct s_cub
 }					t_cub;
 
 // Map checking
-char				**get_map(t_cub *cub, t_list **file);
+char				**get_map(t_cub *cub, t_lst **file);
 int					check_map(t_cub *cub);
 int					check_sides_space(char **map, int i, int j);
 int					is_map_char(char c);
@@ -173,16 +172,16 @@ int					draw_line(t_position start, t_position end, int color,
 // Map utils
 void				free_arr_until_idx(char **arr, int idx);
 int					get_arr_size(char **arr);
-void				skip_elements(t_list **file_content);
+void				skip_elements(t_lst **file_content);
 
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
 t_mlx_img			*init_img(t_window_mlx *data, t_cub *cub);
 int					*get_pixel_from_img(t_mlx_img *img, int x, int y);
 void				img_pix_put(t_mlx_img *img, int x, int y, int color);
-int					init_texture(char **tab, t_list *start, t_cub *cub,
-						t_texture **cub_text);
 t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
+int					ft_check_textures(char **tab, t_cub *cub,
+						t_texture **cub_text);
 
 // Colors rendering
 int					create_trgb(int t, int r, int g, int b);
@@ -219,8 +218,8 @@ double				degree_to_rad(double degree);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 double				wrap_angle_360(double angle, double change, bool add);
 t_vector			rotate_vector(t_vector vec, double angle);
-t_vector			get_vector_from_length(double ray_length,
-						double degree_angle);
+t_vector	get_vector_from_length(double ray_length,
+								double degree_angle);
 t_position			coordinates_to_px(t_cub *cub, double x, double y);
 t_vector			find_dir(t_cub *cub);
 
@@ -233,55 +232,55 @@ int					move_direction_right(t_cub *cub);
 int					open_close_door(t_cub *cub);
 
 // Free functions
-int					quit_cube(t_cub *cub);
 int					error_exit(char *str, t_cub *cub);
 void				exit_map_not_valid(t_cub *cub, int err);
 void				destroy_free_texture(t_cub *cub, t_texture *texture);
 int					quit_cube(t_cub *cub);
-
-// parsing
-int				name_check(char *str);
-t_list				*get_file(int fd);
-int				elems_check(char **split_elem, t_list *start, t_cub *cub);
-int				get_elems(t_list *file_content, t_cub *cub, t_list *start);
-int				parsing(int ac, char **av, t_list **start, t_cub *cub);
-int				get_elems(t_list *file_content, t_cub *cub, t_list *start);
+int					handle_destroy(t_cub *cub);
+int					free_list(t_lst *list);
+void				ft_free(char *str);
+void				free_line(char *line);
+void				free_cub(t_cub *cub);
+void				ft_free_and_return(char **split_elem, t_cub *cub);
+void				tab_free(char **tab);
 
 // init
 void				init_cub(t_cub *cub);
 void				init_mov(t_cub *cub);
 
 // add text
-void				add_texture(char **split_elem, t_list *file_content,
-						t_list *start, t_cub *cub);
+void				add_texture(char **split_elem, t_lst *file_content,
+						t_cub *cub);
 
 // get color
-void				get_color(char **split_elem, t_list *start, t_cub *cub,
-						char id);
+void				ft_get_color(char **tab, t_cub *cub, char id);
 
 // utils
 bool				is_space(char c);
-void				free_line(char *line);
-void				free_cub(t_cub *cub);
 bool				is_empty(char *str);
-int				is_elem(char *str);
+int					is_elem(char *str);
+int					size_tab(char **tab);
 
 // utils2
 bool				is_number(char c);
 bool				only_numbers(char *str);
 int					create_rgb(int r, int g, int b);
 int					pos_atoi(char *str);
-void				skip_elements(t_list **file_content);
+void				skip_elements(t_lst **file_content);
+// void	ft_destroy_cub(t_cub cub);
 
 // errors
-void				map_error(int fd, char *msg, t_list *file_content);
-void				texture_error(char **tab, t_list *start, t_cub *cub,
-						char *msg);
-void				color_error(char **tab, t_list *start, t_cub *cub,
-						char *color);
+void				map_error(int fd, char *msg, t_lst *file_content);
+void				texture_error(char **tab, t_cub *cub, char *msg);
+void				color_error(char **tab, t_cub *cub, char *color);
 
 // ft_split
 char				**ft_split(const char *s, char c);
-void	tab_free(char **tab);
+
+// parsing
+int					ft_read_file(char *file_path, t_cub *cub);
+int					ft_check_extension(char *sr);
+int					get_elems(t_lst *file_content, t_cub *cub);
+void				ft_another_function(t_cub *cub);
 
 #endif

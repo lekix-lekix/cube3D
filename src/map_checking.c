@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/12 15:45:35 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:14:49 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+void	ft_another_destroy_cub(t_cub *cub);
 
-int	ft_lstsize_check_empty(t_list **lst)
+int	ft_lstsize_check_empty(t_lst **lst)
 {
-	t_list	*current;
+	t_lst	*current;
 	int		i;
 
 	i = 0;
@@ -28,11 +29,11 @@ int	ft_lstsize_check_empty(t_list **lst)
 	return (i);
 }
 
-char	**get_map(t_cub *cub, t_list **file)
+char	**get_map(t_cub *cub, t_lst **file)
 {
 	char	**map;
 	int		i;
-	t_list	*current;
+	t_lst	*current;
 
 	map = malloc(sizeof(char *) * (ft_lstsize_check_empty(file) + 1));
 	if (!map)
@@ -105,3 +106,10 @@ int	check_map(t_cub *cub)
 		return (exit_map_not_valid(cub, 4), -1);
 	return (0);
 }
+
+// void	ft_another_destroy_cub(t_cub *cub)
+// {
+// 	mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);
+// 	mlx_destroy_display(cub->mlx_data.mlx_ptr);
+// 	free(cub->mlx_data.mlx_ptr);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 17:30:14 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/12 15:30:42 by kipouliq         ###   ########.fr       */
+/*   Created: 2025/01/16 10:03:15 by sabakar-          #+#    #+#             */
+/*   Updated: 2025/01/16 13:10:52 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exit_map_not_valid(t_cub *cub, int err)
 	exit(EXIT_FAILURE);
 }
 
-void	map_error(int fd, char *msg, t_list *file_content)
+void	map_error(int fd, char *msg, t_lst *file_content)
 {
 	printf("Error\n%s\n", msg);
 	if (fd > 0)
@@ -36,16 +36,16 @@ void	map_error(int fd, char *msg, t_list *file_content)
 		free_list(file_content);
 }
 
-void	texture_error(char **tab, t_list *start, t_cub *cub, char *msg)
+void	texture_error(char **tab, t_cub *cub, char *msg)
 {
 	if (tab)
-		free_tab(tab);
+		tab_free(tab);
 	free_cub(cub);
-	map_error(-1, msg, start);
+	map_error(-1, msg, NULL);
 }
 
-void	color_error(char **tab, t_list *start, t_cub *cub, char *color)
+void	color_error(char **tab, t_cub *cub, char *color)
 {
 	ft_free(color);
-	texture_error(tab, start, cub, "Format error. exemple: C 225,30,0");
+	texture_error(tab, cub, "Format error. exemple: C 225,30,0");
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 17:29:44 by inbennou          #+#    #+#             */
-/*   Updated: 2024/12/15 19:56:03 by sabakar-         ###   ########.fr       */
+/*   Created: 2025/01/09 16:23:07 by sabakar-          #+#    #+#             */
+/*   Updated: 2025/01/16 10:33:45 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_cub(t_cub *cub)
 	free(cub->no_text);
 	free(cub->we_text);
 	if (cub->map)
-		free_tab(cub->map);
+		tab_free(cub->map);
 }
 
 bool	is_space(char c)
@@ -42,7 +42,7 @@ bool	is_empty(char *str)
 	i = 0;
 	while (is_space(str[i]) || str[i] == '\n')
 		i++;
-	if (i == ft_strlen(str)) // If the line aka the str is empty, we return true.
+	if (i == (int)ft_strlen(str)) // If the line aka the str is empty, we return true.
 		return (true);
 	return (false);
 }

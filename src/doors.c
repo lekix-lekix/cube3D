@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:00:25 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/12 14:02:23 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 10:40:15 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	is_oob(char **map, int x, int y)
 		return (1);
 	if (y >= get_arr_size(map))
 		return (1);
-	if (x > ft_strlen(map[y]))
+	if (x > (int)ft_strlen(map[y]))
 		return (1);
 	return (0);
 }

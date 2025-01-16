@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/13 15:40:06 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:06:41 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	start_mlx(int height, int width, t_cub *cub)
 {
 	cub->mlx_data.mlx_ptr = mlx_init();
 	if (!cub->mlx_data.mlx_ptr)
-		return (error_exit(MEM_ERROR, cub), -1);
+		return (printf("We are indeed here\n"), error_exit(MEM_ERROR, cub), -1);
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
 	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
