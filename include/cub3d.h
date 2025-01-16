@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:13:30 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:53:07 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int					draw_line(t_position start, t_position end, int color,
 // Map utils
 void				free_arr_until_idx(char **arr, int idx);
 int					get_arr_size(char **arr);
-void				skip_elements(t_lst **file_content);
+t_lst				*skip_elements(t_lst **file_content);
 
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
@@ -233,7 +233,7 @@ int					open_close_door(t_cub *cub);
 
 // Free functions
 int					error_exit(char *str, t_cub *cub);
-void				exit_map_not_valid(t_cub *cub, int err);
+void				err_map_not_valid(int err);
 void				destroy_free_texture(t_cub *cub, t_texture *texture);
 int					quit_cube(t_cub *cub);
 int					handle_destroy(t_cub *cub);
@@ -266,7 +266,7 @@ bool				is_number(char c);
 bool				only_numbers(char *str);
 int					create_rgb(int r, int g, int b);
 int					pos_atoi(char *str);
-void				skip_elements(t_lst **file_content);
+// void				skip_elements(t_lst **file_content);
 // void	ft_destroy_cub(t_cub cub);
 
 // errors

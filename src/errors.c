@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:03:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:10:52 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:52:21 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	exit_map_not_valid(t_cub *cub, int err)
+void	err_map_not_valid(int err)
 {
 	printf("Error\n");
 	if (err == 1)
@@ -23,8 +23,6 @@ void	exit_map_not_valid(t_cub *cub, int err)
 		printf("Multiple players detected.\n");
 	if (err == 4)
 		printf("No player detected.\n");
-	free_cub(cub);
-	exit(EXIT_FAILURE);
 }
 
 void	map_error(int fd, char *msg, t_lst *file_content)

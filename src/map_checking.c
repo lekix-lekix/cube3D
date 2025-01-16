@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 13:14:49 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:53:44 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,17 @@ int	check_map(t_cub *cub)
 		while (cub->map[i][++j])
 		{
 			if (is_border(cub->map, i, j) && cub->map[i][j] != '1')
-				return (exit_map_not_valid(cub, 1), -1);
+				return (err_map_not_valid(1), -1);
 			if (!is_allowed_char(cub->map[i][j]))
-				return (exit_map_not_valid(cub, 2), -1);
+				return (err_map_not_valid(2), -1);
 			if (player_found && is_player_direction(cub->map[i][j]))
-				return (exit_map_not_valid(cub, 3), -1);
+				return (err_map_not_valid(3), -1);
 			else if (is_player_direction(cub->map[i][j]))
 				player_found = 1;
 		}
 	}
 	if (!player_found)
-		return (exit_map_not_valid(cub, 4), -1);
+		return (err_map_not_valid(4), -1);
 	return (0);
 }
 

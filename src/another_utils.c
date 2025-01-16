@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   another_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:43:10 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:16:20 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:01:18 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	free_list(t_lst *list)
 	while (list)
 	{
 		tmp = list;
-		list = list->next;
 		free(tmp->content);
 		free(tmp);
+		list = list->next;
 	}
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:08:15 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:47:24 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	main(int ac, char **av)
 	init_cub(&cub);
 	printf("The return was: %d\n", start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub));
 	if (!ft_parsing(av[1], &cub))
-		return (ft_destroy_cub(cub), 1);
+		return (quit_cube(&cub));
+		// return (ft_destroy_cub(cub), 1);
 	init_mov(&cub);
 	unit_height = (SCREEN_HEIGHT / 2) / size_tab(cub.map);
 	unit_width = (SCREEN_WIDTH / 3) / tab_max_width(cub.map);
@@ -71,6 +72,7 @@ int	ft_parsing (char *file_path, t_cub *cub)
 		return (0);
 	if (!ft_read_file(file_path, cub))
 		return (0);
-	check_map(cub);
+	if (check_map(cub) == -1)
+		return (0);
 	return (1);
 }
