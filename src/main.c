@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 16:47:24 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:36:34 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ void	ft_destroy_cub(t_cub cub)
 	free(cub.mlx_data.mlx_ptr);
 }
 
+void init_all_textures(t_cub *cub)
+{
+	init_mlx_img_texture(cub, cub->no_text);
+	init_mlx_img_texture(cub, cub->so_text);
+	init_mlx_img_texture(cub, cub->ea_text);
+	init_mlx_img_texture(cub, cub->we_text);
+	cub->door_text = alloc_mlx_texture(cub, "./textures/door.xpm");
+	cub->sky = alloc_mlx_texture(cub, "./textures/sky_big.xpm");
+	init_mlx_img_texture(cub, cub->door_text);
+	init_mlx_img_texture(cub, cub->sky);
+}
+
 int	main(int ac, char **av)
 {
 	t_cub	cub;
@@ -47,17 +59,21 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (printf("Dude, give it a map.\n"), 1);
 	init_cub(&cub);
-	printf("The return was: %d\n", start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub));
 	if (!ft_parsing(av[1], &cub))
 		return (quit_cube(&cub));
 		// return (ft_destroy_cub(cub), 1);
+	printf("The return was: %d\n", start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub));
 	init_mov(&cub);
+	init_all_textures(&cub);
 	unit_height = (SCREEN_HEIGHT / 2) / size_tab(cub.map);
 	unit_width = (SCREEN_WIDTH / 3) / tab_max_width(cub.map);
+	printf("size tav = %d\n", size_tab(cub.map));
+	printf("tab max width = %d\n", tab_max_width(cub.map));
 	if (unit_height < unit_width)
-		cub.map_unit = unit_width;
-	else
 		cub.map_unit = unit_height;
+	else
+		cub.map_unit = unit_width;
+	printf("cub map units = %d\n", cub.map_unit);
 	mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, &handle_keypress, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 3, 1L << 1, &handle_keyrelease, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &handle_destroy, &cub);

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:32:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/13 12:41:01 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:22:53 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,12 @@ int	refresh_raycasting(t_cub *cub)
 int	start_raycasting(t_cub *cub)
 {
 	find_player_init_pos(cub);
-	cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
-	if (!cub->sky)
-		return (error_exit(NULL, cub), -1);
-	cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
-	if (!cub->door_text)
-		return (error_exit(NULL, cub), -1);
+	// cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
+	// if (!cub->sky)
+		// return (error_exit(NULL, cub), -1);
+	// cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
+	// if (!cub->door_text)
+		// return (error_exit(NULL, cub), -1);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;

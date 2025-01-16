@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:03:53 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 11:53:28 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:01:12 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ void	add_texture(char **split_elem, t_lst *file_content, t_cub *cub)
     tab_free(split_elem);
 }
 
+t_texture *alloc_mlx_texture(t_cub *cub, char *path)
+{
+    t_texture *text;
+
+    text = malloc(sizeof(t_texture));
+    if (!text)
+        return (error_exit(MEM_ERROR, cub), NULL);
+    text->path = path;
+    text->text_img = NULL;
+    return (text);
+}
+
 int ft_check_textures (char **tab, t_cub *cub, t_texture **cub_text)
 {
  	if (size_tab(tab) != 2)
@@ -40,8 +52,7 @@ int ft_check_textures (char **tab, t_cub *cub, t_texture **cub_text)
     char *path = ft_strtrim(tab[1], "\n");
     if (!path)
         return (error_exit(MEM_ERROR, cub), 0);
-    *cub_text = init_mlx_img_texture(cub, path);
-    free(path);
+    *cub_text = alloc_mlx_texture(cub, path);
     return 1;
 }
 
