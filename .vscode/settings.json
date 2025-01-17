@@ -1,8 +1,0 @@
-{
-    "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
-    },
-    "files.associations": {
-        "cub3d.h": "c"
-    }
-}

@@ -6,12 +6,11 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 18:36:34 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:52:50 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-int	ft_parsing (char *file_path, t_cub *cub);
 
 int	tab_max_width(char **tab)
 {
@@ -38,16 +37,35 @@ void	ft_destroy_cub(t_cub cub)
 	free(cub.mlx_data.mlx_ptr);
 }
 
-void init_all_textures(t_cub *cub)
+void	init_all_textures(t_cub *cub)
 {
+	char	*path;
+
 	init_mlx_img_texture(cub, cub->no_text);
 	init_mlx_img_texture(cub, cub->so_text);
 	init_mlx_img_texture(cub, cub->ea_text);
 	init_mlx_img_texture(cub, cub->we_text);
-	cub->door_text = alloc_mlx_texture(cub, "./textures/door.xpm");
-	cub->sky = alloc_mlx_texture(cub, "./textures/sky_big.xpm");
+	path = ft_strdup("./textures/door.xpm");
+	if (!path)
+		error_exit(MEM_ERROR, cub);
+	cub->door_text = alloc_mlx_texture(cub, path);
+	path = ft_strdup("./textures/sky_big.xpm");
+	if (!path)
+		error_exit(MEM_ERROR, cub);
+	cub->sky = alloc_mlx_texture(cub, path);
 	init_mlx_img_texture(cub, cub->door_text);
 	init_mlx_img_texture(cub, cub->sky);
+}
+
+int	ft_parsing(char *file_path, t_cub *cub)
+{
+	if (!ft_check_extension(file_path))
+		return (0);
+	if (!ft_read_file(file_path, cub))
+		return (0);
+	if (check_map(cub) == -1)
+		return (0);
+	return (1);
 }
 
 int	main(int ac, char **av)
@@ -61,34 +79,19 @@ int	main(int ac, char **av)
 	init_cub(&cub);
 	if (!ft_parsing(av[1], &cub))
 		return (quit_cube(&cub));
-		// return (ft_destroy_cub(cub), 1);
-	printf("The return was: %d\n", start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub));
+	start_mlx(SCREEN_HEIGHT, SCREEN_WIDTH, &cub);
 	init_mov(&cub);
 	init_all_textures(&cub);
 	unit_height = (SCREEN_HEIGHT / 2) / size_tab(cub.map);
 	unit_width = (SCREEN_WIDTH / 3) / tab_max_width(cub.map);
-	printf("size tav = %d\n", size_tab(cub.map));
-	printf("tab max width = %d\n", tab_max_width(cub.map));
 	if (unit_height < unit_width)
 		cub.map_unit = unit_height;
 	else
 		cub.map_unit = unit_width;
-	printf("cub map units = %d\n", cub.map_unit);
 	mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, &handle_keypress, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 3, 1L << 1, &handle_keyrelease, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &handle_destroy, &cub);
 	start_raycasting(&cub);
 	mlx_loop_hook(cub.mlx_data.mlx_ptr, &check_player_movements, &cub);
 	mlx_loop(cub.mlx_data.mlx_ptr);
-}
-
-int	ft_parsing (char *file_path, t_cub *cub)
-{
-	if (!ft_check_extension(file_path))
-		return (0);
-	if (!ft_read_file(file_path, cub))
-		return (0);
-	if (check_map(cub) == -1)
-		return (0);
-	return (1);
 }
