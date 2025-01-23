@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:23:07 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 10:33:45 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:07:23 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	check_file(char *sr)
 	if (fd >= 0)
 		return (close(fd), 1);
 	else
-		return (close(fd), 0);
+		return (0);
 }
 
 int	is_elem(char *str)

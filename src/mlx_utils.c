@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 13:06:41 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:51:20 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	start_mlx(int height, int width, t_cub *cub)
 {
 	cub->mlx_data.mlx_ptr = mlx_init();
 	if (!cub->mlx_data.mlx_ptr)
-		return (printf("We are indeed here\n"), error_exit(MEM_ERROR, cub), -1);
+		return (error_exit(MEM_ERROR, cub), -1);
 	cub->mlx_data.width = width;
 	cub->mlx_data.height = height;
 	cub->mlx_data.win_ptr = mlx_new_window(cub->mlx_data.mlx_ptr, width, height,
@@ -26,28 +26,18 @@ int	start_mlx(int height, int width, t_cub *cub)
 	return (0);
 }
 
-t_texture	*init_mlx_img_texture(t_cub *cub, char *path)
+void	init_mlx_img_texture(t_cub *cub, t_texture *text)
 {
-	t_texture	*texture;
-	int			texture_width;
-	int			texture_height;
-
-	texture = malloc(sizeof(t_texture));
-	if (!texture)
-		return (error_exit(NULL, cub), NULL);
-	texture->text_img = malloc(sizeof(t_mlx_img));
-	if (!texture->text_img)
-		return (error_exit(NULL, cub), NULL);
-	texture->text_img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
-			path, &texture_width, &texture_height);
-	if (!texture->text_img->img_ptr)
-		return (error_exit(NULL, cub), NULL);
-	texture->text_img->img_addr = mlx_get_data_addr(texture->text_img->img_ptr,
-			&texture->text_img->bpp, &texture->text_img->line_len,
-			&texture->text_img->endian);
-	texture->width = texture_width;
-	texture->height = texture_height;
-	return (texture);
+	text->text_img = malloc(sizeof(t_mlx_img));
+	if (!text->text_img)
+		error_exit(NULL, cub);
+	text->text_img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
+			text->path, &text->width, &text->height);
+	if (!text->text_img->img_ptr)
+		error_exit(NULL, cub);
+	text->text_img->img_addr = mlx_get_data_addr(text->text_img->img_ptr,
+			&text->text_img->bpp, &text->text_img->line_len,
+			&text->text_img->endian);
 }
 
 t_mlx_img	*init_img(t_window_mlx *data, t_cub *cub)

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:13:48 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/13 15:40:37 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:12:26 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ void	tab_free(char **tab)
 
 void	destroy_free_texture(t_cub *cub, t_texture *texture)
 {
-	mlx_destroy_image(cub->mlx_data.mlx_ptr, texture->text_img->img_ptr);
-	free(texture->text_img);
+	if (texture->text_img)
+	{
+		mlx_destroy_image(cub->mlx_data.mlx_ptr, texture->text_img->img_ptr);
+		free(texture->text_img);
+	}
+	if (texture->path)
+		free(texture->path);
 	free(texture);
 }
 
@@ -47,6 +52,7 @@ void	free_textures(t_cub *cub)
 
 int	quit_cube(t_cub *cub)
 {
+	printf("quit cube\n");
 	free_textures(cub);
 	if (cub->mlx_data.win_ptr)
 		mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);

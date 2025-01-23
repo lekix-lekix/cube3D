@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 13:13:30 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:52:28 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct s_color
 typedef struct s_texture
 {
 	t_mlx_img		*text_img;
+	char			*path;
 	int				width;
 	int				height;
 }					t_texture;
@@ -172,14 +173,15 @@ int					draw_line(t_position start, t_position end, int color,
 // Map utils
 void				free_arr_until_idx(char **arr, int idx);
 int					get_arr_size(char **arr);
-void				skip_elements(t_lst **file_content);
+t_lst				*skip_elements(t_lst **file_content);
 
 // Minilibx display functions
 int					start_mlx(int height, int width, t_cub *cub);
 t_mlx_img			*init_img(t_window_mlx *data, t_cub *cub);
 int					*get_pixel_from_img(t_mlx_img *img, int x, int y);
 void				img_pix_put(t_mlx_img *img, int x, int y, int color);
-t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
+void				init_mlx_img_texture(t_cub *cub, t_texture *text);
+// t_texture			*init_mlx_img_texture(t_cub *cub, char *path);
 int					ft_check_textures(char **tab, t_cub *cub,
 						t_texture **cub_text);
 
@@ -194,6 +196,7 @@ void				pick_texture_slice(t_cub *cub, t_ray *ray,
 						t_texture_slice *slice);
 int					pick_slice_color(t_texture_slice *slice, t_ray *ray, int i,
 						int start_y_px);
+t_texture			*alloc_mlx_texture(t_cub *cub, char *path);
 
 // Raycasting
 int					start_raycasting(t_cub *cub);
@@ -218,8 +221,8 @@ double				degree_to_rad(double degree);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 double				wrap_angle_360(double angle, double change, bool add);
 t_vector			rotate_vector(t_vector vec, double angle);
-t_vector	get_vector_from_length(double ray_length,
-								double degree_angle);
+t_vector			get_vector_from_length(double ray_length,
+						double degree_angle);
 t_position			coordinates_to_px(t_cub *cub, double x, double y);
 t_vector			find_dir(t_cub *cub);
 
@@ -233,7 +236,7 @@ int					open_close_door(t_cub *cub);
 
 // Free functions
 int					error_exit(char *str, t_cub *cub);
-void				exit_map_not_valid(t_cub *cub, int err);
+void				err_map_not_valid(int err);
 void				destroy_free_texture(t_cub *cub, t_texture *texture);
 int					quit_cube(t_cub *cub);
 int					handle_destroy(t_cub *cub);
@@ -266,8 +269,6 @@ bool				is_number(char c);
 bool				only_numbers(char *str);
 int					create_rgb(int r, int g, int b);
 int					pos_atoi(char *str);
-void				skip_elements(t_lst **file_content);
-// void	ft_destroy_cub(t_cub cub);
 
 // errors
 void				map_error(int fd, char *msg, t_lst *file_content);

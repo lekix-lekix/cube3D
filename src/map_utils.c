@@ -3,26 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 10:26:06 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:44:54 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	skip_elements(t_lst **file_content)
+t_lst *skip_elements(t_lst **file_content)
 {
-	int	i;
+	int i;
+	t_lst *current;
+	t_lst *tmp;
 
+	current = *file_content;
 	i = 0;
-	while (file_content && i < 6)
+	while (current && i < 6)
 	{
-		if (!is_empty((*file_content)->content))
+		if (!is_empty(current->content))
 			i++;
-		*file_content = (*file_content)->next;
+		tmp = current->next;
+		free(current->content);
+		free(current);
+		current = tmp;
 	}
+	return (current);
 }
 
 int	error_exit(char *str, t_cub *cub)

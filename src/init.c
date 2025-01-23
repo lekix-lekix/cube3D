@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:01:34 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 10:01:37 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:50:46 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_cub(t_cub *cub)
 	cub->so_text = NULL;
 	cub->ea_text = NULL;
 	cub->we_text = NULL;
+	cub->door_text = NULL;
 	cub->mlx_data.mlx_ptr = NULL;
 	cub->mlx_data.win_ptr = NULL;
 	cub->sky = NULL;
