@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 16:53:44 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:56:45 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
 void	ft_another_destroy_cub(t_cub *cub);
 
 int	ft_lstsize_check_empty(t_lst **lst)
@@ -106,10 +107,3 @@ int	check_map(t_cub *cub)
 		return (err_map_not_valid(4), -1);
 	return (0);
 }
-
-// void	ft_another_destroy_cub(t_cub *cub)
-// {
-// 	mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);
-// 	mlx_destroy_display(cub->mlx_data.mlx_ptr);
-// 	free(cub->mlx_data.mlx_ptr);
-// }

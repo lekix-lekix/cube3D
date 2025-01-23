@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/17 13:52:28 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:54:25 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,8 @@ double				degree_to_rad(double degree);
 t_position			get_pos_from_vector(t_position init_pos, t_vector vector);
 double				wrap_angle_360(double angle, double change, bool add);
 t_vector			rotate_vector(t_vector vec, double angle);
-t_vector			get_vector_from_length(double ray_length,
-						double degree_angle);
+t_vector	get_vector_from_length(double ray_length,
+								double degree_angle);
 t_position			coordinates_to_px(t_cub *cub, double x, double y);
 t_vector			find_dir(t_cub *cub);
 
@@ -263,6 +263,7 @@ bool				is_space(char c);
 bool				is_empty(char *str);
 int					is_elem(char *str);
 int					size_tab(char **tab);
+int					check_file(char *sr);
 
 // utils2
 bool				is_number(char c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   another_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:43:10 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/16 16:01:18 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:48:55 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	handle_destroy(t_cub *cub)
 {
 	quit_cube(cub);
 	exit(0);
-	// return (0);
 }
 
 void	ft_free_and_return(char **split_elem, t_cub *cub)
@@ -63,14 +62,14 @@ void	ft_free_and_return(char **split_elem, t_cub *cub)
 	{
 		if (cub->no_text->text_img && cub->no_text->text_img->img_ptr)
 			mlx_destroy_image(cub->mlx_data.mlx_ptr,
-								cub->no_text->text_img->img_ptr);
+				cub->no_text->text_img->img_ptr);
 		(free(cub->no_text->text_img), free(cub->no_text));
 	}
 	if (cub->so_text)
 	{
 		if (cub->so_text->text_img && cub->so_text->text_img->img_ptr)
 			mlx_destroy_image(cub->mlx_data.mlx_ptr,
-								cub->so_text->text_img->img_ptr);
+				cub->so_text->text_img->img_ptr);
 		(free(cub->so_text->text_img), free(cub->so_text));
 	}
 }

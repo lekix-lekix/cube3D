@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:13:48 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 18:12:26 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:18:06 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	free_textures(t_cub *cub)
 
 int	quit_cube(t_cub *cub)
 {
-	printf("quit cube\n");
 	free_textures(cub);
 	if (cub->mlx_data.win_ptr)
 		mlx_destroy_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr);
@@ -63,6 +62,6 @@ int	quit_cube(t_cub *cub)
 	}
 	if (cub->map)
 		tab_free(cub->map);
-	exit(0);
+	exit(1);
 	return (0);
 }

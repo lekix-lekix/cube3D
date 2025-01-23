@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:32:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 18:22:53 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:55:31 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,6 @@ int	refresh_raycasting(t_cub *cub)
 int	start_raycasting(t_cub *cub)
 {
 	find_player_init_pos(cub);
-	// cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
-	// if (!cub->sky)
-		// return (error_exit(NULL, cub), -1);
-	// cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
-	// if (!cub->door_text)
-		// return (error_exit(NULL, cub), -1);
 	cub->player.dir = find_dir(cub);
 	if (cub->player.initial_dir == 'N')
 		cub->player.angle = 90;
@@ -111,3 +105,11 @@ int	start_raycasting(t_cub *cub)
 	refresh_raycasting(cub);
 	return (0);
 }
+
+// These were inside the start_raycasting function and commented out
+// cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
+// if (!cub->sky)
+// return (error_exit(NULL, cub), -1);
+// cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
+// if (!cub->door_text)
+// return (error_exit(NULL, cub), -1);

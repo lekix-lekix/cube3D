@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 16:22:23 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/08/28 14:39:05 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:34:23 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	{
 		sub_str = malloc(1);
 		sub_str[0] = '\0';
-		// free((char *)s);
 		return (sub_str);
 	}
 	if (len > str_len)
@@ -49,7 +48,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!sub_str)
 		return (NULL);
 	ft_str_cpy(s, sub_str, len, start);
-	// free((char *)s);
 	return (sub_str);
 }
 

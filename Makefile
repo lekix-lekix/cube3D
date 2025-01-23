@@ -6,7 +6,7 @@
 #    By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 14:55:41 by sabakar-          #+#    #+#              #
-#    Updated: 2025/01/16 11:48:49 by sabakar-         ###   ########.fr        #
+#    Updated: 2025/01/23 13:53:45 by sabakar-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ SRC = src/errors.c src/utils.c src/utils2.c src/init.c \
 	src/exit_free.c \
 	src/ft_file_checking.c \
 	src/ft_get_textures.c \
-	src/another_utils.c
+	src/another_utils.c \
+	src/cuz_norm.c
 
 OBJS_BASE = $(SRC:.c=.o)
 # OBJS_BASE_BONUS = $(SRC_BONUS:.c=.o)

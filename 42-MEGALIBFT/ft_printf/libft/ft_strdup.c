@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 15:57:03 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/08/26 16:57:36 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:33:41 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,5 @@ char	*ft_strdup(const char *s)
 	if (!final_str)
 		return (NULL);
 	ft_strlcpy(final_str, s, s_len + 1);
-	// free(s);
 	return (final_str);
 }

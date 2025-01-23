@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/17 13:52:50 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:29:45 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int ac, char **av)
 	int		unit_height;
 
 	if (ac != 2)
-		return (printf("Dude, give it a map.\n"), 1);
+		return (printf("Error\n"), printf("Dude, give it a map.\n"), 1);
 	init_cub(&cub);
 	if (!ft_parsing(av[1], &cub))
 		return (quit_cube(&cub));

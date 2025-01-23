@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/16 16:44:54 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:57:40 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-t_lst *skip_elements(t_lst **file_content)
+t_lst	*skip_elements(t_lst **file_content)
 {
-	int i;
-	t_lst *current;
-	t_lst *tmp;
+	int		i;
+	t_lst	*current;
+	t_lst	*tmp;
 
 	current = *file_content;
 	i = 0;
