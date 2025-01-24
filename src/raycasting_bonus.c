@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   raycasting_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:32:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/24 12:28:06 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:27:55 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ int	refresh_raycasting(t_cub *cub)
 	if (!map_rays)
 		return (error_exit(NULL, cub), -1);
 	shoot_rays(img, cub, map_rays);
-	// draw_map(img, cub);
-	// draw_map_rays(img, cub, map_rays);
+	draw_map(img, cub);
+	draw_map_rays(img, cub, map_rays);
 	mlx_put_image_to_window(cub->mlx_data.mlx_ptr, cub->mlx_data.win_ptr,
 		img->img_ptr, 0, 0);
 	mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr);
@@ -105,11 +105,3 @@ int	start_raycasting(t_cub *cub)
 	refresh_raycasting(cub);
 	return (0);
 }
-
-// These were inside the start_raycasting function and commented out
-// cub->sky = init_mlx_img_texture(cub, "./textures/sky_big.xpm");
-// if (!cub->sky)
-// return (error_exit(NULL, cub), -1);
-// cub->door_text = init_mlx_img_texture(cub, "./textures/door2.xpm");
-// if (!cub->door_text)
-// return (error_exit(NULL, cub), -1);
