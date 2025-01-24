@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/24 12:22:24 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:13:06 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,10 @@ void	ft_destroy_cub(t_cub cub)
 
 void	init_all_textures(t_cub *cub)
 {
-	// char	*path;
-
 	init_mlx_img_texture(cub, cub->no_text);
 	init_mlx_img_texture(cub, cub->so_text);
 	init_mlx_img_texture(cub, cub->ea_text);
 	init_mlx_img_texture(cub, cub->we_text);
-	// path = ft_strdup("./textures/door.xpm");
-	// if (!path)
-	// 	error_exit(MEM_ERROR, cub);
-	// cub->door_text = alloc_mlx_texture(cub, path);
-	// path = ft_strdup("./textures/sky_big.xpm");
-	// if (!path)
-	// 	error_exit(MEM_ERROR, cub);
-	// cub->sky = alloc_mlx_texture(cub, path);
-	// init_mlx_img_texture(cub, cub->door_text);
-	// init_mlx_img_texture(cub, cub->sky);
 }
 
 int	ft_parsing(char *file_path, t_cub *cub)

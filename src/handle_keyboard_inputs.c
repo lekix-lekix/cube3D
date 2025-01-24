@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 17:48:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/24 12:24:18 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:12:57 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,6 @@ int	check_player_movements(t_cub *cub)
 	return (0);
 }
 
-// void	handle_sky_bool(t_cub *cub)
-// {
-// 	if (cub->sky_bool)
-// 		cub->sky_bool = false;
-// 	else
-// 		cub->sky_bool = true;
-// }
-
 int	handle_keypress(int key, t_cub *cub)
 {
 	if (key == ESCAPE)
@@ -52,14 +44,10 @@ int	handle_keypress(int key, t_cub *cub)
 		cub->mov.strafe_l = true;
 	else if (cub->mov.buffer == D)
 		cub->mov.strafe_r = true;
-	// else if (cub->mov.buffer == F)
-	// 	open_close_door(cub);
 	else if (cub->mov.buffer == LEFT)
 		cub->mov.dir_l = true;
 	else if (cub->mov.buffer == RIGHT)
 		cub->mov.dir_r = true;
-	// else if (cub->mov.buffer == P)
-	// 	handle_sky_bool(cub);
 	return (0);
 }
 
