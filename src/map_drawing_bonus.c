@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_drawing.c                                      :+:      :+:    :+:   */
+/*   map_drawing_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:49:33 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/17 13:47:00 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/24 15:18:37 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	draw_block(t_mlx_img *img, t_position *px, char c, t_cub *cub)
 				- 1)
 				img_pix_put(img, px->x + i, px->y + j, 0x808080);
 			else if (c == '1')
-				img_pix_put(img, px->x + i, px->y + j, 0x000000);
+				img_pix_put(img, px->x + i, px->y + j, 0xFFFFFF);
 		}
 	}
 }
