@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_file_checking.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:55 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/23 14:27:56 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:46:59 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	ft_read_file(char *file_path, t_cub *cub)
 	{
 		if (file_content)
 			ft_lstclear(&file_content, free);
-		return (printf("Error\n"), printf("Your file is missing elements.\n"), 0);
+		return (printf("Error\n"), printf("Your file is missing elements.\n"),
+			0);
 	}
 	if (!get_elems(file_content, cub))
 		return (ft_lstclear(&file_content, free), quit_cube(cub), -1);
@@ -76,6 +77,39 @@ int	ft_read_file(char *file_path, t_cub *cub)
 	get_next_line(0, 1);
 	return (1);
 }
+
+// void	ft_get_file_content(int fd, t_lst **file_content)
+// {
+// 	char	*line;
+// 	t_lst	*new_node;
+// 	int		i;
+
+// 	i = 0;
+// 	line = get_next_line(fd, 0);
+// 	while (line && line[0] != '\0')
+// 	{
+// 		// if (i == 10)
+// 		// 	new_node = NULL;
+// 		// else
+// 		new_node = ft_lstnew(line);
+// 		if (!new_node)
+// 		{
+// 			// ft_lstclear(file_content, free);
+// 			get_next_line(0, 1);
+// 			// free(line);
+// 			return ;
+// 		}
+// 		ft_lstadd_back(file_content, new_node);
+// 		i++;
+// 	}
+// 	if (line)
+// 	{
+// 		free(line);
+// 		get_next_line(0, 0);
+// 	}
+// 	if (fd > 0)
+// 		close(fd);
+// }
 
 void	ft_get_file_content(int fd, t_lst **file_content)
 {
@@ -87,9 +121,17 @@ void	ft_get_file_content(int fd, t_lst **file_content)
 	line = get_next_line(fd, 0);
 	while (line && line[0] != '\0')
 	{
-		new_node = ft_lstnew(line);
+		if (i == 10)
+			new_node = NULL;
+		else
+			new_node = ft_lstnew(line);
 		if (!new_node)
+		{
+			ft_lstclear(file_content, free);
+			free(line);
+			get_next_line(fd, 1);
 			return ;
+		}
 		ft_lstadd_back(file_content, new_node);
 		i++;
 		line = get_next_line(fd, 0);
