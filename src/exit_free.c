@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:13:48 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/23 13:18:06 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:56:25 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	destroy_free_texture(t_cub *cub, t_texture *texture)
 {
 	if (texture->text_img)
 	{
-		mlx_destroy_image(cub->mlx_data.mlx_ptr, texture->text_img->img_ptr);
+		if (texture->text_img->img_ptr)
+			mlx_destroy_image(cub->mlx_data.mlx_ptr,
+				texture->text_img->img_ptr);
 		free(texture->text_img);
 	}
 	if (texture->path)
@@ -62,6 +64,11 @@ int	quit_cube(t_cub *cub)
 	}
 	if (cub->map)
 		tab_free(cub->map);
+	if (cub->file_content)
+	{
+		ft_lstclear(cub->file_content, free);
+		cub->file_content = NULL;
+	}
 	exit(1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:55:12 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/12 15:31:41 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:30:22 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	pick_texture_slice(t_cub *cub, t_ray *ray, t_texture_slice *slice)
 	{
 		(*ray).intersection_x = modf((*ray).intersection_y, &modf_var);
 		if ((*ray).angle >= 90 && (*ray).angle <= 270)
-			slice->texture = cub->we_text;
-		else
 			slice->texture = cub->ea_text;
+		else
+			slice->texture = cub->we_text;
 	}
 	else
 	{

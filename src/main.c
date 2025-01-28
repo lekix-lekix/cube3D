@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/24 14:13:06 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:46:35 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	tab_max_width(char **tab)
 	return (max);
 }
 
-// Free resources
 void	ft_destroy_cub(t_cub cub)
 {
 	mlx_destroy_window(cub.mlx_data.mlx_ptr, cub.mlx_data.win_ptr);
@@ -78,7 +77,7 @@ int	main(int ac, char **av)
 		cub.map_unit = unit_width;
 	mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, &handle_keypress, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 3, 1L << 1, &handle_keyrelease, &cub);
-	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &handle_destroy, &cub);
+	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &quit_cube, &cub);
 	start_raycasting(&cub);
 	mlx_loop_hook(cub.mlx_data.mlx_ptr, &check_player_movements, &cub);
 	mlx_loop(cub.mlx_data.mlx_ptr);

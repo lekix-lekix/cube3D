@@ -6,7 +6,7 @@
 #    By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 14:55:41 by sabakar-          #+#    #+#              #
-#    Updated: 2025/01/24 15:16:22 by kipouliq         ###   ########.fr        #
+#    Updated: 2025/01/28 18:51:03 by kipouliq         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,7 @@ MLX_INC = -L ./mlx -lmlx -lXext -lX11 -lm
 NAME = cub3d
 NAME_BONUS = cub3d_bonus
 
-SRC_BASE = src/errors.c \
-	src/utils.c \
+SRC_BASE = src/utils.c \
 	src/utils2.c \
 	src/init.c \
 	src/get_color.c \
@@ -41,8 +40,7 @@ SRC_BASE = src/errors.c \
 	src/exit_free.c \
 	src/ft_file_checking.c \
 	src/ft_get_textures.c \
-	src/another_utils.c \
-	src/cuz_norm.c
+	src/cuz_norm.c \
 
 SRC_MAND = src/main.c \
 	src/handle_keyboard_inputs.c \

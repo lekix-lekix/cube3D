@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/23 13:57:40 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:44:02 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_lst	*skip_elements(t_lst **file_content)
 {
 	int		i;
 	t_lst	*current;
-	t_lst	*tmp;
 
 	current = *file_content;
 	i = 0;
@@ -24,10 +23,7 @@ t_lst	*skip_elements(t_lst **file_content)
 	{
 		if (!is_empty(current->content))
 			i++;
-		tmp = current->next;
-		free(current->content);
-		free(current);
-		current = tmp;
+		current = current->next;
 	}
 	return (current);
 }

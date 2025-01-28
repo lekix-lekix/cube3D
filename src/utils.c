@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:23:07 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/23 13:56:11 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:50:33 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-void	free_line(char *line)
-{
-	ft_free(line);
-	get_next_line(0, 1);
-}
-
-void	free_cub(t_cub *cub)
-{
-	free(cub->ea_text);
-	free(cub->so_text);
-	free(cub->no_text);
-	free(cub->we_text);
-	if (cub->map)
-		tab_free(cub->map);
-}
 
 bool	is_space(char c)
 {
@@ -63,7 +47,13 @@ int	check_file(char *sr)
 	char	*path_wnl;
 
 	fpath = ft_split(sr, 32);
+	if (!fpath)
+		return (0);
+	if (size_tab(fpath) != 2)
+		return (tab_free(fpath), 0);
 	path_wnl = ft_remove_newline(fpath[1]);
+	if (!path_wnl)
+		return (tab_free(fpath), 0);
 	fd = open(path_wnl, O_RDWR);
 	free(path_wnl);
 	tab_free(fpath);
@@ -71,4 +61,27 @@ int	check_file(char *sr)
 		return (close(fd), 1);
 	else
 		return (0);
+}
+
+int	size_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
+}
+
+void	err_map_not_valid(int err)
+{
+	printf("Error\n");
+	if (err == 1)
+		printf("Open map detected.\n");
+	if (err == 2)
+		printf("Forbidden character detected.\n");
+	if (err == 3)
+		printf("Multiple players detected.\n");
+	if (err == 4)
+		printf("No player detected.\n");
 }

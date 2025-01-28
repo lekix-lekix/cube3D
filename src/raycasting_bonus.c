@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:32:51 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/24 12:27:55 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:14:30 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,11 @@ int	refresh_raycasting(t_cub *cub)
 
 	img = init_img(&cub->mlx_data, cub);
 	if (!img)
-		return (error_exit(NULL, cub), -1);
+		return (error_exit(MEM_ERROR, cub), -1);
 	map_rays = malloc(sizeof(t_vector) * (SCREEN_WIDTH + 1));
 	if (!map_rays)
-		return (error_exit(NULL, cub), -1);
+		return (mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr),
+			free(img), error_exit(MEM_ERROR, cub), -1);
 	shoot_rays(img, cub, map_rays);
 	draw_map(img, cub);
 	draw_map_rays(img, cub, map_rays);

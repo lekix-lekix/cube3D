@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 13:48:08 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/17 13:51:20 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:07:37 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,34 @@ void	init_mlx_img_texture(t_cub *cub, t_texture *text)
 {
 	text->text_img = malloc(sizeof(t_mlx_img));
 	if (!text->text_img)
-		error_exit(NULL, cub);
+		error_exit(MEM_ERROR, cub);
 	text->text_img->img_ptr = mlx_xpm_file_to_image(cub->mlx_data.mlx_ptr,
 			text->path, &text->width, &text->height);
 	if (!text->text_img->img_ptr)
-		error_exit(NULL, cub);
+		error_exit(MEM_ERROR, cub);
 	text->text_img->img_addr = mlx_get_data_addr(text->text_img->img_ptr,
 			&text->text_img->bpp, &text->text_img->line_len,
 			&text->text_img->endian);
+	if (!text->text_img->img_addr)
+		error_exit(MEM_ERROR, cub);
 }
 
 t_mlx_img	*init_img(t_window_mlx *data, t_cub *cub)
 {
 	t_mlx_img	*img;
 
+	(void)data;
 	img = malloc(sizeof(t_mlx_img));
 	if (!img)
 		return (error_exit(NULL, cub), NULL);
 	img->img_ptr = mlx_new_image(data->mlx_ptr, data->width, data->height);
 	if (!img->img_ptr)
-		return (NULL);
+		return (free(img), error_exit(MEM_ERROR, cub), NULL);
 	img->img_addr = mlx_get_data_addr(img->img_ptr, &img->bpp, &img->line_len,
 			&img->endian);
+	if (!img->img_addr)
+		return (mlx_destroy_image(cub->mlx_data.mlx_ptr, img->img_ptr),
+			free(img), error_exit(MEM_ERROR, cub), NULL);
 	return (img);
 }
 

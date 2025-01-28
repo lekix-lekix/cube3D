@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:01:34 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/23 13:57:19 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:13:13 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,5 @@ void	init_cub(t_cub *cub)
 	cub->mov.dir_l = false;
 	cub->mov.dir_l = false;
 	cub->mov.buffer = 0;
+	cub->file_content = NULL;
 }

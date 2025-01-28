@@ -4,7 +4,7 @@ WE ./textures/walkstone.xpm
 EA ./textures/walkstone.xpm
 
 F 220,100,0
-C 225,30,0
+C 0,200,0
 
 
 

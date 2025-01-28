@@ -6,7 +6,7 @@
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:39 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/28 13:43:20 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:02:21 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,13 @@ char	*ft_return_line(char **static_str, char *eol)
 
 char	*get_next_line(int fd, int free_static)
 {
-	static char	*static_str;
-	char		*line;
-	char		*eol;
-	int			bytes_read;
+	static char *static_str;
+	char *line;
+	char *eol;
+	int bytes_read;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!free_static)
-		return (free(static_str), NULL);
 	if (!check_static_str(static_str, &eol, &bytes_read, free_static))
 	{
 		line = ft_fill_static(&static_str, &eol, &bytes_read, fd);
@@ -120,5 +118,7 @@ char	*get_next_line(int fd, int free_static)
 		static_str = NULL;
 		return (line);
 	}
+	if (!free_static && line)
+		free(line);
 	return (NULL);
 }
