@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 12:03:53 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/30 18:24:55 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:33:39 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,7 @@ int	ft_check_textures(char **tab, t_cub *cub, t_texture **cub_text)
 	char	*path;
 
 	if (*cub_text)
-	{
-		printf("Double : %s", tab[1]);
-		return (tab_free(tab), error_exit(MEM_ERROR, cub), 0);
-	}
+		return (tab_free(tab), error_exit("Double detected", cub), 0);
 	if (size_tab(tab) != 2)
 	{
 		printf("Error\nFormat error in elements: ID ./path_to_texture.\n");

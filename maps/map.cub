@@ -3,13 +3,13 @@ WE ./textures/leavesop.xpm
 
 SO ./textures/bookshelf.xpm
 EA ./textures/forest.xpm
-SO ./textures/bookshelf.xpm
-WE ./textures/leavesop.xpm
 
 F 134,1,255
 C 170,250,255
 
+C 170,250,255
 
+WE ./textures/leavesop.xpm
 
 
 
