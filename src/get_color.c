@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_color.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:49:03 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/28 18:45:49 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:24:07 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,31 @@ void	ft_get_color(char **tab, t_cub *cub, char id)
 	if (color_str)
 		free(color_str);
 	tab_free(tab);
+}
+
+bool	ft_check_after_six(t_lst **file_content)
+{
+	t_lst	*curr;
+	int		x;
+
+	curr = *file_content;
+	x = 0;
+	while (curr)
+	{
+		if (is_empty(curr->content))
+			curr = curr->next;
+		else if (!is_empty(curr->content))
+		{
+			while (((char *)curr->content)[x] &&
+				((char *)curr->content)[x] != '\n')
+			{
+				if (is_allowed_char(((char *)curr->content)[x]))
+					x++;
+				else
+					return (false);
+			}
+			return (true);
+		}
+	}
+	return (false);
 }

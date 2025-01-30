@@ -1,11 +1,26 @@
 NO ./textures/walkstone.xpm
-EA ./textures/forest.xpm
+WE ./textures/leavesop.xpm
+
 SO ./textures/bookshelf.xpm
+EA ./textures/forest.xpm
 SO ./textures/bookshelf.xpm
 WE ./textures/leavesop.xpm
 
 F 134,1,255
 C 170,250,255
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 111111111111
 100000000001

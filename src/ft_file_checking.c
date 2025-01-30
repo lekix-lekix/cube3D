@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_file_checking.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:55 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/28 18:55:20 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:25:11 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,13 @@ int	get_elems(t_lst **file_content, t_cub *cub)
 			if (is_elem(current->content))
 				add_texture(split_elem, current, file_content, cub);
 			else
-			{
-				printf("Error\n");
-				printf("Can't open file or one of the elems is NOT right.\n");
-				return (0);
-			}
+				return (printf("Error\n"), printf("%s\n", ELEM_ERR), 0);
 			current = current->next;
 		}
 	}
+	current = current->next;
+	if (!ft_check_after_six(&current))
+		return (printf("Error\n"), printf("%s\n", ELEM_ERR), 0);
 	return (1);
 }
 

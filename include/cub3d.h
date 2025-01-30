@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/28 18:50:57 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:22:28 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define PI 3.14159265359
 # define PI_RAD 0.01745329251
 # define MEM_ERROR "Memory allocation failed"
+# define ELEM_ERR "Can't open file or one of the elems is NOT right."
 
 typedef struct s_window_mlx
 {
@@ -272,6 +273,6 @@ char				**ft_split(const char *s, char c);
 int					ft_read_file(char *file_path, t_cub *cub);
 int					ft_check_extension(char *sr);
 int					get_elems(t_lst **file_content, t_cub *cub);
-void				ft_another_function(t_cub *cub);
+bool				ft_check_after_six (t_lst **file_content);
 
 #endif
