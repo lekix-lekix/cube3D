@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:15 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/24 12:21:15 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:26:39 by kipouliq         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	main(int ac, char **av)
 		cub.map_unit = unit_width;
 	mlx_hook(cub.mlx_data.win_ptr, 2, 1L << 0, &handle_keypress, &cub);
 	mlx_hook(cub.mlx_data.win_ptr, 3, 1L << 1, &handle_keyrelease, &cub);
-	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &handle_destroy, &cub);
+	mlx_hook(cub.mlx_data.win_ptr, 17, 1L << 17, &quit_cube, &cub);
 	start_raycasting(&cub);
 	mlx_loop_hook(cub.mlx_data.mlx_ptr, &check_player_movements, &cub);
 	mlx_loop(cub.mlx_data.mlx_ptr);
