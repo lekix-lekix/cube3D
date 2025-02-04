@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:23:07 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/04 15:01:53 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:36:38 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ char	*ft_remove_newline(char *sr)
 	return (res);
 }
 
-bool check_color_textures_name(char **fpath)
+bool	check_color_textures_name(char **fpath)
 {
-	if (ft_strncmp(fpath[0], "NO", ft_strlen(fpath[0])) != 0 &&
-	ft_strncmp(fpath[0], "SO", ft_strlen(fpath[0])) != 0 &&
-	ft_strncmp(fpath[0], "EA", ft_strlen(fpath[0])) != 0 &&
-	ft_strncmp(fpath[0], "WE", ft_strlen(fpath[0])) != 0 &&
-	ft_strncmp(fpath[0], "F", ft_strlen(fpath[0])) != 0 &&
-	ft_strncmp(fpath[0], "C", ft_strlen(fpath[0])) != 0)
+	if (ft_strncmp(fpath[0], "NO", ft_strlen(fpath[0])) != 0
+		&& ft_strncmp(fpath[0], "SO", ft_strlen(fpath[0])) != 0
+		&& ft_strncmp(fpath[0], "EA", ft_strlen(fpath[0])) != 0
+		&& ft_strncmp(fpath[0], "WE", ft_strlen(fpath[0])) != 0
+		&& ft_strncmp(fpath[0], "F", ft_strlen(fpath[0])) != 0
+		&& ft_strncmp(fpath[0], "C", ft_strlen(fpath[0])) != 0)
 		return (false);
 	return (true);
 }

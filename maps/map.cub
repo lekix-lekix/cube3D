@@ -1,10 +1,10 @@
 NO ./textures/walkstone.xpm
 WE ./textures/grass.xpm
 EA ./textures/forest.xpm
+SO ./textures/bookshelf.xpm
 
 C 170,250,255
 
-SO ./textures/bookshelf.xpm
 
 F      134,1,255
 

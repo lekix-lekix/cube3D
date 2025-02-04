@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:51:19 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/04 15:27:59 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:36:33 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_file(char **fpath)
 
 int	is_elem(char *str, t_cub *cub)
 {
-	char **fpath;
+	char	**fpath;
 
 	if (!str)
 		return (false);
