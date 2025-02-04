@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:49:03 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/30 18:24:07 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:19:46 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ bool	ft_check_after_six(t_lst **file_content)
 	while (curr)
 	{
 		if (is_empty(curr->content))
-			curr = curr->next;
+		{	curr = curr->next;}
 		else if (!is_empty(curr->content))
 		{
 			while (((char *)curr->content)[x] &&

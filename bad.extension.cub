@@ -1,10 +1,9 @@
 NO ./textures/walkstone.xpm
 
-
 SO ./textures/walkstone.xpm
 
-
 WE ./textures/walkstone.xpm
+
 EA ./textures/walkstone.xpm
 
 F 200,200,200

@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/30 18:22:28 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:31:51 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,9 +256,11 @@ void				ft_get_color(char **tab, t_cub *cub, char id);
 // utils
 bool				is_space(char c);
 bool				is_empty(char *str);
-int					is_elem(char *str);
+int					is_elem(char *str, t_cub *cub);
 int					size_tab(char **tab);
-int					check_file(char *sr);
+int					check_file(char **fpath);
+bool check_color_textures_name(char **fpath);
+char	*ft_remove_newline(char *sr);
 
 // utils2
 bool				is_number(char c);

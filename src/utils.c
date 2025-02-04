@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:23:07 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/28 18:50:33 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:01:53 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,16 @@ char	*ft_remove_newline(char *sr)
 	return (res);
 }
 
-int	check_file(char *sr)
+bool check_color_textures_name(char **fpath)
 {
-	int		fd;
-	char	**fpath;
-	char	*path_wnl;
-
-	fpath = ft_split(sr, 32);
-	if (!fpath)
-		return (0);
-	if (size_tab(fpath) != 2)
-		return (tab_free(fpath), 0);
-	path_wnl = ft_remove_newline(fpath[1]);
-	if (!path_wnl)
-		return (tab_free(fpath), 0);
-	fd = open(path_wnl, O_RDWR);
-	free(path_wnl);
-	tab_free(fpath);
-	if (fd >= 0)
-		return (close(fd), 1);
-	else
-		return (0);
+	if (ft_strncmp(fpath[0], "NO", ft_strlen(fpath[0])) != 0 &&
+	ft_strncmp(fpath[0], "SO", ft_strlen(fpath[0])) != 0 &&
+	ft_strncmp(fpath[0], "EA", ft_strlen(fpath[0])) != 0 &&
+	ft_strncmp(fpath[0], "WE", ft_strlen(fpath[0])) != 0 &&
+	ft_strncmp(fpath[0], "F", ft_strlen(fpath[0])) != 0 &&
+	ft_strncmp(fpath[0], "C", ft_strlen(fpath[0])) != 0)
+		return (false);
+	return (true);
 }
 
 int	size_tab(char **tab)

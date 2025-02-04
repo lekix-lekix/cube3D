@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:55 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/30 18:25:11 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:12:57 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,20 @@ int	get_elems(t_lst **file_content, t_cub *cub)
 	t_lst	*current;
 	int		x;
 
-	x = -1;
+	x = 0;
 	split_elem = NULL;
 	current = *file_content;
-	while (current && ++x < 6)
+	while (current && x < 6)
 	{
-		if (is_empty(current->content))
+		if (is_empty(current->content) == 1)
 			current = current->next;
 		else
 		{
-			if (is_elem(current->content))
+			if (is_elem(current->content, cub))
 				add_texture(split_elem, current, file_content, cub);
 			else
 				return (printf("Error\n"), printf("%s\n", ELEM_ERR), 0);
+			x++;
 			current = current->next;
 		}
 	}
