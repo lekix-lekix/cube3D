@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/04 15:31:51 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:18:43 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,8 +259,8 @@ bool				is_empty(char *str);
 int					is_elem(char *str, t_cub *cub);
 int					size_tab(char **tab);
 int					check_file(char **fpath);
-bool check_color_textures_name(char **fpath);
-char	*ft_remove_newline(char *sr);
+bool				check_color_textures_name(char **fpath);
+char				*ft_remove_newline(char *sr);
 
 // utils2
 bool				is_number(char c);
@@ -275,6 +275,6 @@ char				**ft_split(const char *s, char c);
 int					ft_read_file(char *file_path, t_cub *cub);
 int					ft_check_extension(char *sr);
 int					get_elems(t_lst **file_content, t_cub *cub);
-bool				ft_check_after_six (t_lst **file_content);
+bool				ft_check_after_six(t_lst **file_content);
 
 #endif

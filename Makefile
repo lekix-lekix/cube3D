@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+         #
+#    By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 14:55:41 by sabakar-          #+#    #+#              #
-#    Updated: 2025/01/28 18:51:03 by kipouliq         ###   ########.fr        #
+#    Updated: 2025/02/04 17:31:01 by sabakar-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ PATH_LIBFT = ./42-MEGALIBFT
 LIBFT = ./42-MEGALIBFT/megalibft.a
 MLX_INC = -L ./mlx -lmlx -lXext -lX11 -lm
 
-NAME = cub3d
-NAME_BONUS = cub3d_bonus
+NAME = cub3D
+NAME_BONUS = cub3D_bonus
 
 SRC_BASE = src/utils.c \
 	src/utils2.c \

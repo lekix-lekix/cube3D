@@ -1,7 +1,7 @@
 NO ./textures/walkstone.xpm
 WE ./textures/grass.xpm
 EA ./textures/forest.xpm
-SO ./textures/bookshelf.xpm
+SO ./textures/forest.xpm
 
 C 170,250,255
 
@@ -19,7 +19,8 @@ F      134,1,255
 
 
 111111111111
-100000000001
-1000000N0001
-100000000001
+10000000N0001
+1000000111101
+1000001  1001
+100000111101
 111111111111

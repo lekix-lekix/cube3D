@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:04:59 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/28 15:44:02 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:34:18 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ t_lst	*skip_elements(t_lst **file_content)
 		if (!is_empty(current->content))
 			i++;
 		current = current->next;
+	}
+	while (current)
+	{
+		if (is_empty(current->content))
+			current = current->next;
+		else
+			break ;
 	}
 	return (current);
 }

@@ -6,7 +6,7 @@
 /*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:49:03 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/04 15:36:26 by sabakar-         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:48:50 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ bool	ft_check_end(char *sr)
 	int	len;
 
 	len = ft_strlen(sr) - 1;
-	if (sr[len - 1] >= '0' && sr[len - 1] <= '9')
+	if (sr[len - 1] >= '0' && sr[len - 1] <= '9' && sr[0] >= '0'
+		&& sr[0] <= '9')
 		return (true);
 	else
 		return (false);

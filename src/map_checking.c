@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 14:20:05 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/28 15:50:08 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:30:40 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	ft_lstsize_check_empty(t_lst **lst)
 	current = *lst;
 	while (current)
 	{
-		if (!is_empty(current->content))
-			i++;
+		i++;
 		current = current->next;
 	}
 	return (i);
@@ -41,14 +40,11 @@ char	**get_map(t_cub *cub, t_lst **file)
 	current = *file;
 	while (current)
 	{
-		if (!is_empty(current->content))
-		{
-			map[i] = ft_strtrim(current->content, "\n");
-			if (!map[i])
-				return (free_arr_until_idx(map, i), free(map),
-					error_exit(MEM_ERROR, cub), NULL);
-			i++;
-		}
+		map[i] = ft_remove_newline(current->content);
+		if (!map[i])
+			return (free_arr_until_idx(map, i), free(map), error_exit(MEM_ERROR,
+					cub), NULL);
+		i++;
 		current = current->next;
 	}
 	map[i] = NULL;
