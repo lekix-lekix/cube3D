@@ -5,7 +5,7 @@ EA ./textures/walkstone.xpm
 
 SO ./textures/walkstone.xpm
 
-C 0,0,0
+C 0,0,-12
 F 134,1,255
 
 1111111111111

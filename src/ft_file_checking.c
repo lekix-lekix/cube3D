@@ -6,7 +6,7 @@
 /*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:55 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/09 19:02:21 by lekix            ###   ########.fr       */
+/*   Updated: 2025/02/09 19:40:44 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	print_lst(t_lst **file_content)
 	t_lst	*current;
 
 	current = *file_content;
-	if (!current)
-		printf("sljjdf\n");
 	while (current)
 	{
 		printf("%s", (char *)current->content);
