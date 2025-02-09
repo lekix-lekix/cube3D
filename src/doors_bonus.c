@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:00:25 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/01/31 13:40:23 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:39:10 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 void	check_wall_inc(t_ray *ray, int *x, int *y)
 {
 	double	modf_var_x;
-	double	modf_var_y;
 	double	inter_x;
-	double	inter_y;
 
 	inter_x = modf((*ray).intersection_x, &modf_var_x);
-	inter_y = modf((*ray).intersection_y, &modf_var_y);
 	if (!inter_x)
 	{
 		*y = 0;

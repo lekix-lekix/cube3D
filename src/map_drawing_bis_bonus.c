@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_drawing_bis.c                                  :+:      :+:    :+:   */
+/*   map_drawing_bis_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:44:26 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/12/13 15:25:31 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:34:30 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ int	draw_player(t_mlx_img *img, t_cub *cub)
 	t_position	fov_l;
 	t_position	fov_r;
 	t_position	dir;
-	int			arr_size;
 
-	arr_size = get_arr_size(cub->map);
 	fov_l = get_pos_from_vector(cub->player.pos, cub->player.fov_l);
 	fov_r = get_pos_from_vector(cub->player.pos, cub->player.fov_r);
 	dir = get_pos_from_vector(cub->player.pos, cub->player.dir);
@@ -56,9 +54,6 @@ int	draw_player(t_mlx_img *img, t_cub *cub)
 
 int	draw_ray(t_cub *cub, t_mlx_img *img, t_position start, t_position end)
 {
-	int	arr_size;
-
-	arr_size = size_tab(cub->map);
 	start = coordinates_to_px(cub, start.x, start.y);
 	end = coordinates_to_px(cub, end.x, end.y);
 	start.x = round(start.x);
@@ -72,10 +67,8 @@ int	draw_ray(t_cub *cub, t_mlx_img *img, t_position start, t_position end)
 int	draw_map_rays(t_mlx_img *img, t_cub *cub, t_vector *map_rays)
 {
 	int	i;
-	int	arr_size;
 
 	i = SCREEN_WIDTH;
-	arr_size = get_arr_size(cub->map);
 	while (i >= 0)
 	{
 		draw_ray(cub, img, cub->player.pos, get_pos_from_vector(cub->player.pos,
