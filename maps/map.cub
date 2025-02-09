@@ -1,26 +1,20 @@
 NO ./textures/walkstone.xpm
-WE ./textures/grass.xpm
-EA ./textures/forest.xpm
-SO ./textures/forest.xpm
-
-C 170,250,255
+WE ./textures/walkstone.xpm
+EA ./textures/walkstone.xpm
 
 
-F      134,1,255
+SO ./textures/walkstone.xpm
 
+C 0,0,0
+F 134,1,255
 
-
-
-
-
-
-
-
-
-
-111111111111
+1111111111111
 10000000N0001
 1000000111101
 1000001  1001
 100000111101
-111111111111
+11111111111111111111111111111111
+
+1111
+1001
+1111

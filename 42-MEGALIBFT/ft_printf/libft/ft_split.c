@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:39:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2024/01/22 17:55:15 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/09 19:24:17 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	ft_count_words(char const *s, char sep)
 	return (count);
 }
 
-static char	*ft_malloc_cpy(char const *src, int n)
+static char	*ft_malloc_cpy(char const *src, int n, int *idx)
 {
 	char	*final_str;
 	int		i;
@@ -43,6 +43,7 @@ static char	*ft_malloc_cpy(char const *src, int n)
 	while (src[++i] && i < n)
 		final_str[i] = src[i];
 	final_str[i] = '\0';
+    *idx = 0;
 	return (final_str);
 }
 
@@ -66,22 +67,23 @@ static int	ft_fill_arr(char **strs, char const *s, char c)
 
 	i = 0;
 	k = -1;
-	while (s[i])
+	while (s && s[i])
 	{
 		i = 0;
 		ft_skip(s, &i, c, 1);
-		if (!s[i])
+		if (!s || !s[i])
 			return (0);
 		j = i;
 		ft_skip(s, &j, c, 0);
 		if (!s[j] || s[j] == c)
 		{
-			strs[++k] = ft_malloc_cpy(s + i, j - i);
+			strs[++k] = ft_malloc_cpy(s + i, j - i, &i);
 			if (!strs[k])
 				return (-1);
 			if (!s[j])
 				return (0);
 			s += j;
+            i = 0;
 		}
 	}
 	return (0);

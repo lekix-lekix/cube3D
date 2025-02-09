@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bresenham.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:38:37 by lekix             #+#    #+#             */
-/*   Updated: 2024/12/12 15:30:32 by kipouliq         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:19:57 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,9 @@ int	draw_line(t_position start, t_position end, int color, t_mlx_img *img)
 {
 	int	dx;
 	int	dy;
-	int	inc_x;
-	int	inc_y;
 
 	dx = end.x - start.x;
 	dy = end.y - start.y;
-	inc_x = define_inc(dx);
-	inc_y = define_inc(dy);
 	dx = abs(dx);
 	dy = abs(dy);
 	if (start.x < 0 || start.y < 0 || end.x < 0 || end.y < 0)
