@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:39:41 by kipouliq          #+#    #+#             */
-/*   Updated: 2025/02/09 19:24:17 by lekix            ###   ########.fr       */
+/*   Updated: 2025/02/10 13:52:29 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*ft_malloc_cpy(char const *src, int n, int *idx)
 	while (src[++i] && i < n)
 		final_str[i] = src[i];
 	final_str[i] = '\0';
-    *idx = 0;
+	*idx = 0;
 	return (final_str);
 }
 
@@ -83,7 +83,6 @@ static int	ft_fill_arr(char **strs, char const *s, char c)
 			if (!s[j])
 				return (0);
 			s += j;
-            i = 0;
 		}
 	}
 	return (0);

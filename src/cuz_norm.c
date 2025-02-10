@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cuz_norm.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:51:19 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/09 19:03:22 by lekix            ###   ########.fr       */
+/*   Updated: 2025/02/10 13:55:13 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ int	is_elem(char *str, t_cub *cub)
 	fpath = ft_split(str, ' ');
 	if (!fpath)
 		return (error_exit(MEM_ERROR, cub));
-    if (size_tab(fpath) > 2)
-	{
+	if (size_tab(fpath) > 2)
 		return (tab_free(fpath), false);
-	}
 	if (!check_color_textures_name(fpath))
 		return (tab_free(fpath), false);
 	if (ft_strlen(fpath[0]) > 1 && !check_file(fpath))

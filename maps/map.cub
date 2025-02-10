@@ -1,11 +1,10 @@
-NO ./textures/walkstone.xpm
-WE ./textures/walkstone.xpm
-EA ./textures/walkstone.xpm
-
-
+NO ./textures/bookshelf.xpm
+WE ./textures/forest.xpm
+EA ./textures/grass.xpm
 SO ./textures/walkstone.xpm
 
-C 0,0,-12
+
+C 234,1,0111
 F 134,1,255
 
 1111111111111

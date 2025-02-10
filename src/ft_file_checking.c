@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_file_checking.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 16:20:55 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/09 19:40:44 by lekix            ###   ########.fr       */
+/*   Updated: 2025/02/10 13:39:28 by sabakar-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int	get_elems(t_lst **file_content, t_cub *cub)
 			current = current->next;
 		else
 		{
-            // printf("content = %s\n", (char*)current->content);
 			if (is_elem(current->content, cub))
 				add_texture(split_elem, current, file_content, cub);
 			else
