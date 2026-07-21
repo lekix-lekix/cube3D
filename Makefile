@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+         #
+#    By: lekix <lekix@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 14:55:41 by sabakar-          #+#    #+#              #
-#    Updated: 2025/02/04 17:31:01 by sabakar-         ###   ########.fr        #
+#    Updated: 2026/07/21 11:17:49 by lekix            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,8 @@ RUN_OBJS_BONUS = $(addprefix $(OBJ_PATH),$(OBJS_BONUS))
 OBJS = $(RUN_OBJS_BASE) $(RUN_OBJS_MAND)
 BONUS_OBJS = $(RUN_OBJS_BASE) $(RUN_OBJS_BONUS)
 
-all: $(OBJ_PATH) $(NAME)
+all: bonus
+	mv cub3D_bonus cub3D
 
 $(NAME): $(RUN_OBJS_BASE) $(RUN_OBJS_MAND)
 	make -C $(PATH_LIBFT)

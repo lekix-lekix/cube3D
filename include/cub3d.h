@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sabakar- <sabakar-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 09:56:50 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/02/04 17:18:43 by sabakar-         ###   ########.fr       */
+/*   Updated: 2026/07/21 10:44:44 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define SCREEN_WIDTH 1600
-# define SCREEN_HEIGHT 800
+# define SCREEN_WIDTH 800
+# define SCREEN_HEIGHT 600
 # define W 119
 # define A 97
 # define S 115

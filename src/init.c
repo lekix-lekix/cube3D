@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kipouliq <kipouliq@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lekix <lekix@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:01:34 by sabakar-          #+#    #+#             */
-/*   Updated: 2025/01/28 15:13:13 by kipouliq         ###   ########.fr       */
+/*   Updated: 2026/07/21 10:40:55 by lekix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	init_cub(t_cub *cub)
 	cub->mlx_data.mlx_ptr = NULL;
 	cub->mlx_data.win_ptr = NULL;
 	cub->sky = NULL;
-	cub->sky_bool = false;
+	cub->sky_bool = true;
 	cub->map = NULL;
 	cub->mov.fwd = false;
 	cub->mov.bwd = false;
