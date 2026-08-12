@@ -61,7 +61,7 @@ C 225,30,0
 ## 🛠️ Installation
 
 ```bash
-git clone <repo_url>
+git clone https://github.com/lekix-lekix/cube3D.git
 cd cub3D
 make
 ```
